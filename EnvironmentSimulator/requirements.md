@@ -1,3 +1,15 @@
+# Introduction and Brief
+The project will implement a modular ecosystem simulation where environments, resources, 
+and animal actors interact through movement, feeding, reproduction, and combat. 
+Users will be able to add resources such as water and grass, introduce herbivores and carnivores 
+(individually or in packs), and observe how they behave according to species rules. 
+The simulation will support saving and loading the world state in JSON format and will include 
+a plugin system that dynamically transforms generic actors into more specific species types—such as wolves, 
+lions, or bears—with unique stats. Plugins will be loadable and unloadable at runtime, 
+allowing the system to revert seamlessly between generic and specialized actors.
+
+---
+
 # Functional Requirements
 
 ## REQ‑F‑001 — Resource Management
