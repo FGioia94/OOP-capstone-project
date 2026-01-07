@@ -1,5 +1,7 @@
 package strategy.IO;
 
-public interface DeserializationStrategy {
-    public GameSnapshot deserialize(byte[] data) throws Exception;
+import memento.GameSnapshot.GameSnapshot;
+
+public interface DeserializationStrategy<T> {
+    public GameSnapshot deserialize(T data) throws Exception;
 }

@@ -1,8 +1,15 @@
 package strategy.IO;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
-public interface PersistenceStrategy {
-    void save(byte[] data) throws IOException;
+public abstract class PersistenceStrategy<T>  {
+    protected final Path path;
+
+    public PersistenceStrategy(String filePath) {
+        this.path = Path.of(filePath);
+    }
+
+    abstract void save(T serialized) throws IOException;
 
 }

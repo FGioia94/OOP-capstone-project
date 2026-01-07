@@ -1,5 +1,10 @@
 package strategy.IO;
 
-public interface SerializationStrategy {
-    public byte[] serialize(Object data);
+import com.google.gson.Gson;
+import memento.GameSnapshot.GameSnapshot;
+
+import java.nio.charset.StandardCharsets;
+
+public interface SerializationStrategy<T> {
+    public T serialize(GameSnapshot snapshot) throws Exception;
 }

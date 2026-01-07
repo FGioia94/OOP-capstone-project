@@ -6,7 +6,7 @@ import java.util.List;
 
 public class HerbivoreFactory extends AnimalFactory {
     @Override
-    public Animal createAnimal(MapBuilder builder,
+    public Animal createAnimal(
                                AnimalRepository repository,
                                Position position,
                                String sex,
@@ -14,7 +14,6 @@ public class HerbivoreFactory extends AnimalFactory {
                                int exp,
                                int level) {
 
-        validateCreation(builder, position, sex, hp, exp, level);
         Animal herbivore = new Herbivore(
                 position,
                 sex,

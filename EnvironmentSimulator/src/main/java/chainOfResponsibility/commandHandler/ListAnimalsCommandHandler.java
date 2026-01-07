@@ -6,11 +6,6 @@ import java.util.Scanner;
 
 public class ListAnimalsCommandHandler implements CommandHandler {
     private CommandHandler next;
-    private final Runnable onExit;
-
-    public ListAnimalsCommandHandler(Runnable onExit) {
-        this.onExit = onExit;
-    }
 
     @Override
     public void setNext(CommandHandler next) {

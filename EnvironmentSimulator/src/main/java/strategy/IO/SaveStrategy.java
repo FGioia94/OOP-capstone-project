@@ -1,5 +1,7 @@
 package strategy.IO;
 
+import memento.GameSnapshot.GameSnapshot;
+
 public interface SaveStrategy {
-    public void save(Object data, String filePath) throws Exception;
+    public void save(GameSnapshot snapshot, String filePath) throws Exception;
 }

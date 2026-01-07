@@ -11,17 +11,14 @@ import memento.GameSnapshot.AnimalState;
 public class CarnivoreFactory extends AnimalFactory {
 
     @Override
-    public Animal createAnimal(MapBuilder builder,
-                               AnimalRepository repository,
-                               Position position,
-                               String sex,
-                               int hp,
-                               int exp,
-                               int level) {
+    public Animal createAnimal(
+            AnimalRepository repository,
+            Position position,
+            String sex,
+            int hp,
+            int exp,
+            int level) {
 
-        if (builder != null) {
-            validateCreation(builder, position, sex, hp, exp, level);
-        }
 
         Animal carnivore = new Carnivore(
                 position,

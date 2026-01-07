@@ -1,7 +1,9 @@
-package strategy.IO;
+package memento.GameSnapshot;
 
 import builder.MapBuilder.MapBuilder;
 import factoryMethod.AnimalFactory.AnimalRepository;
+import memento.GameSnapshot.AnimalRepositoryState;
+import memento.GameSnapshot.MapState;
 
 import java.io.Serializable;
 
@@ -10,8 +12,8 @@ public class GameSnapshot implements Serializable {
     private final MapState mapState;
 
     public GameSnapshot(AnimalRepository repository, MapBuilder builder) {
-        this.animalState = repository.exportState();
-        this.mapState = builder.exportState();
+        this.animalState = repository.toState();
+        this.mapState = builder.toState();
     }
 
     public AnimalRepositoryState getAnimalState() {
@@ -21,4 +23,5 @@ public class GameSnapshot implements Serializable {
     public MapState getMapState() {
         return mapState;
     }
+
 }

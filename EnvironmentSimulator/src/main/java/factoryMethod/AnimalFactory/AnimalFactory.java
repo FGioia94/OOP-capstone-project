@@ -9,18 +9,29 @@ import java.util.List;
 // ANIMAL FACTORY IS THE CREATOR OF THE FACTORY METHOD PATTERN
 public abstract class AnimalFactory {
     // Declaring the FACTORY METHOD
-    public abstract Animal createAnimal(MapBuilder builder,
-                                        AnimalRepository repository,
-                                        Position position,
-                                        String sex,
-                                        int hp,
-                                        int exp,
-                                        int level);
+    public Animal buildAnimal(MapBuilder builder,
+                              AnimalRepository repository,
+                              Position position,
+                              String sex,
+                              int hp,
+                              int exp,
+                              int level) {
+        validateCreation(builder, position, sex, hp, exp, level);
+        return createAnimal(repository, position, sex, hp, exp, level);
+    }
+
+    protected abstract Animal createAnimal(
+            AnimalRepository repository,
+            Position position,
+            String sex,
+            int hp,
+            int exp,
+            int level);
 
     public Animal createAnimalFromState(AnimalRepository repository,
                                         AnimalState state) {
         {
-            return createAnimal(null,
+            return createAnimal(
                     repository,
                     state.position(),
                     state.sex(),
@@ -75,11 +86,11 @@ public abstract class AnimalFactory {
 
 
     public static void validateCreation(MapBuilder builder,
-                                 Position position,
-                                 String sex,
-                                 int hp,
-                                 int exp,
-                                 int level) {
+                                        Position position,
+                                        String sex,
+                                        int hp,
+                                        int exp,
+                                        int level) {
         validatePosition(builder, position);
         validateSex(sex);
         validateHp(hp);

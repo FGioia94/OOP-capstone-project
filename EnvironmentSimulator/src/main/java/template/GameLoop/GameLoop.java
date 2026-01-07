@@ -147,7 +147,7 @@ public class GameLoop {
 
                     factory = Objects.equals(animal.getAnimalType(), "Carnivore") ? new CarnivoreFactory() : new HerbivoreFactory();
 
-                    Animal child = factory.createAnimal(
+                    Animal child = factory.buildAnimal(
                             builder,
                             animalRepository,
                             animal.getPosition(),
@@ -231,5 +231,9 @@ public class GameLoop {
                 }
             }
         }
+    }
+
+    public static void requestExit() {
+        System.exit(0);
     }
 }

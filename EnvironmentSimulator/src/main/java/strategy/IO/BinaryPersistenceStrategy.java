@@ -1,4 +1,17 @@
 package strategy.IO;
 
-public class BinaryPersistenceStrategy implements PersistenceStrategy{
+import java.io.IOException;
+import java.nio.file.Files;
+
+public class BinaryPersistenceStrategy extends PersistenceStrategy<byte[]> {
+
+    public BinaryPersistenceStrategy(String filePath) {
+        super(filePath);
+    }
+
+    @Override
+    public void save(byte[] serialized) throws IOException {
+        Files.write(path, serialized);
+    }
+
 }
