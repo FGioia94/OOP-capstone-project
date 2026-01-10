@@ -1,16 +1,11 @@
 package chainOfResponsibility.commandHandler;
 
-import template.GameLoop.GameLoop;
+import template.Game.GameLoop;
 
 import java.util.Scanner;
 
-public class ListMapCommandHandler implements CommandHandler {
-    private CommandHandler next;
+public class ListMapCommandHandler extends CommandHandler {
 
-    @Override
-    public void setNext(CommandHandler next) {
-        this.next = next;
-    }
 
     @Override
     public boolean handle(String cmd, Scanner scanner, GameLoop gameLoop) {

@@ -5,6 +5,7 @@ import builder.MapBuilder.Position;
 import memento.GameSnapshot.AnimalState;
 
 import java.util.List;
+import java.util.UUID;
 
 // ANIMAL FACTORY IS THE CREATOR OF THE FACTORY METHOD PATTERN
 public abstract class AnimalFactory {

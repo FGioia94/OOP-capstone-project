@@ -4,6 +4,7 @@ import builder.MapBuilder.MapBuilder;
 import builder.MapBuilder.Position;
 
 import java.util.List;
+import java.util.UUID;
 
 import builder.MapBuilder.Position;
 import memento.GameSnapshot.AnimalState;
@@ -19,8 +20,10 @@ public class CarnivoreFactory extends AnimalFactory {
             int exp,
             int level) {
 
+        String id = UUID.randomUUID().toString();
 
         Animal carnivore = new Carnivore(
+                id,
                 position,
                 sex,
                 hp,

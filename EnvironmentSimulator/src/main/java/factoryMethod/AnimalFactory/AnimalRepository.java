@@ -5,14 +5,19 @@ import builder.MapBuilder.Position;
 import memento.GameSnapshot.AnimalRepositoryState;
 import memento.GameSnapshot.AnimalState;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class AnimalRepository {
+public class AnimalRepository implements Serializable {
 
     private final Map<String, Animal> animals = new HashMap<>();
 
     public void add(Animal animal) {
         animals.put(animal.getId(), animal);
+    }
+
+    public void clear() {
+        animals.clear();
     }
 
     public Animal get(String id) {
@@ -40,14 +45,18 @@ public class AnimalRepository {
     public AnimalRepositoryState toState() {
         List<AnimalState> animalStates = new ArrayList<>();
         for (Animal animal : this.getAll()) {
+            System.out.println(animal);
             animalStates.add(new AnimalState(animal));
         }
         return new AnimalRepositoryState(animalStates);
     }
 
-    public static AnimalRepository fromState(AnimalRepositoryState state) throws IllegalArgumentException {
-        AnimalRepository repository = new AnimalRepository();
+    public void fromState(AnimalRepositoryState state) throws IllegalArgumentException {
+        this.animals.clear();
         AnimalFactory factory = null;
+        System.out.println("creating animals from state");
+        System.out.println(this.getAll());
+
         for (AnimalState animalState : state.animals()) {
             switch (animalState.animalType()) {
                 case "Carnivore" -> {
@@ -61,9 +70,19 @@ public class AnimalRepository {
                             + animalState.animalType());
                 }
             }
-            repository.add(factory.createAnimalFromState(repository, animalState));
-        }
+            factory.createAnimalFromState(this, animalState);
+            System.out.println(this.getAll());
 
-        return repository;
+        }
+        System.out.println(this.getAll());
+
+    }
+
+    public List<String> listAll() {
+        List<String> listOfIds = new ArrayList<>();
+        for (Animal animal : this.getAll()) {
+            listOfIds.add(animal.getId());
+        }
+        return listOfIds;
     }
 }

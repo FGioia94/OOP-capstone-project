@@ -6,14 +6,15 @@ import builder.MapBuilder.Position;
 
 
 public class Herbivore extends Animal {
-    public Herbivore(Position position,
+    public Herbivore(String id,
+                     Position position,
                      String sex,
                      int hp,
                      int exp,
                      int level) {
         int range = 3;
         String animalType = "Herbivore";
-        super(range, position, sex, hp, exp, level, animalType);
+        super(id, range, position, sex, hp, exp, level, animalType);
     }
 
 

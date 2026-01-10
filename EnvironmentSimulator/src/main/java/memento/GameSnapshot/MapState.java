@@ -3,13 +3,14 @@ package memento.GameSnapshot;
 import builder.MapBuilder.MapBuilder;
 import builder.MapBuilder.Position;
 
+import java.io.Serializable;
 import java.util.List;
 
 public record MapState(int width,
                        int height,
                        List<Position> grassPositions,
                        List<Position> waterPositions,
-                       List<Position> obstaclesPositions) {
+                       List<Position> obstaclesPositions) implements Serializable {
 
     public MapState(MapBuilder builder) {
         this(builder.getWidth(),

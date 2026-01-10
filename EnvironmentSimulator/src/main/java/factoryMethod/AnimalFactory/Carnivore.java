@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Carnivore extends Animal {
     public Carnivore(
+            String id,
             Position position,
             String sex,
             int hp,
@@ -13,7 +14,7 @@ public class Carnivore extends Animal {
             int level) {
         int range = 5;
         String animalType = "Carnivore";
-        super(range, position, sex, hp, exp, level, animalType);
+        super(id, range, position, sex, hp, exp, level, animalType);
     }
 
 

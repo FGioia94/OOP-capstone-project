@@ -39,7 +39,7 @@ public class LoadGame {
 
         // Ensure file exists
         if (!Files.exists(fullPath)) {
-            throw new Exception("Save directory does not exist: " + saveDir.toString());
+            throw new Exception("Load directory does not exist: " + saveDir.toString());
         }
         GameSnapshot snapshot = strategy.load(fullPath.toString());
         System.out.println("Game loaded from " + fullPath.toString());

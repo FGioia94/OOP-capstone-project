@@ -1,3 +1,8 @@
 package builder.MapBuilder;
 
-public record Position(int x, int y) {}
+import strategy.IO.SaveStrategy;
+
+import java.io.Serializable;
+
+public record Position(int x, int y) implements Serializable {
+}

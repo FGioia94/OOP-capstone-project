@@ -1,12 +1,11 @@
-package template.GameLoop;
+package template.Game;
 
 import builder.MapBuilder.MapBuilder;
+import chainOfResponsibility.commandHandler.*;
 import factoryMethod.AnimalFactory.*;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import builder.MapBuilder.Position;
 
@@ -16,29 +15,47 @@ public class GameLoop {
     private int tick = 0;
     public final MapBuilder builder;
     public final AnimalRepository animalRepository;
+    private boolean turnFinished;
 
     public GameLoop(MapBuilder builder, AnimalRepository animalRepository) {
         this.carryOn = true;
         this.builder = builder;
         this.animalRepository = animalRepository;
+        this.turnFinished = false;
 
     }
 
     public final void run() {
         while (this.carryOn) {
+            if (this.tick == 0) {
+                moveAnimals();
+                attack();
+                checkLifePoints();
+                consumeResources();
+                processHunger();
+                checkLifePoints();
+                reproduce();
+                assignExp();
+                handleUserInputs();
+            } else {
+                String message = "";
+                System.out.println("respawn and move cycle " + this.tick);
+                message += autoRespawnResources();
+                message += moveAnimals();
+                message += attack();
+                message += processHunger();
+                message += checkLifePoints();
+                message += consumeResources();
+                message += reproduce();
+                message += assignExp();
+                handleUserInputs();
+            }
             this.tick++;
-            String message = "";
-            message += autoRespawnResources();
-            message += moveAnimals();
-            message += attack();
-            message += processHunger();
-            message += checkLifePoints();
-            message += consumeResources();
-            message += reproduce();
-            message += assignExp();
-            showRecapMessage(message);
-            boolean changes = handleUserInputs();
-            rebuildMap(builder, animalRepository);
+
+
+//            showRecapMessage(message);
+//
+//            rebuildMap(builder, animalRepository);
 
         }
 
@@ -55,8 +72,8 @@ public class GameLoop {
                 water++;
             }
         }
-        builder.spawnElements(grass, builder.getGrassPositions());
-        builder.spawnElements(water, builder.getWaterPositions());
+        builder.setGrassPositions(builder.spawnElements(grass, builder.getGrassPositions()));
+        builder.setWaterPositions(builder.spawnElements(water, builder.getWaterPositions()));
         return "Respawned " + grass + " grass and " + water + " water.\n";
 
     }
@@ -75,34 +92,51 @@ public class GameLoop {
         Collection<Animal> carnivores = animalRepository.getAllByType("Carnivore");
         for (Animal carn : carnivores) {
             for (Animal target : animals) {
-                if (carn.getPosition() == target.getPosition()) {
-                    target.hp -= carn.getLevel() * 10;
-                    carn.setExp(carn.getExp() + 20);
-                    carn.setHp(carn.getHp() + 10);
+                if (carn.getPosition().equals(target.getPosition())) {
+                    System.out.println("Carnivore " + carn.getId() +
+                            " found target " + target.getId() +
+                            " at position (" + carn.getPosition().x() +
+                            ", " + carn.getPosition().y() + ")");
+                    target.hp -= carn.getLevel() * 20;
+                    carn.setExp(carn.getExp() + 40);
+                    carn.setHp(carn.getHp() + 40);
+                    System.out.println("carnivore " + carn.getId() +
+                            " attacked " + target.getId());
                 }
+
             }
         }
         return "Carnivores attacked nearby animals.\n";
     }
 
     private String processHunger() {
-        Collection<Animal> carnivores = animalRepository.getAllByType("Carnivore");
-        if (this.tick % 5 == 0) {
-            for (Animal carn : carnivores) {
-                carn.setHp(carn.getHp() - 10);
+
+        Collection<Animal> animals = animalRepository.getAll();
+        for (Animal animal : animals) {
+            if (animal.getAnimalType().equals("Herbivore")) {
+                animal.setHp(animal.getHp() - 5);
+            } else {
+                animal.setHp(animal.getHp() - 20);
             }
         }
-        return "Carnivores are getting hungry.\n";
+        return "Animals are getting hungry.\n";
     }
 
 
     private String checkLifePoints() {
         Collection<Animal> animals = animalRepository.getAll();
+        List<String> toRemove = new ArrayList<>();
+
         for (Animal animal : animals) {
             if (animal.getHp() <= 0) {
-                animalRepository.remove(animal.getId());
+                toRemove.add(animal.getId());
             }
         }
+
+        for (String id : toRemove) {
+            animalRepository.remove(id);
+        }
+
         return "Some animals didn't pass the night.\n";
     }
 
@@ -179,61 +213,49 @@ public class GameLoop {
         return "Assigned experience points to animals.\n";
     }
 
+//    private void askUser() {
+//        System.out.println("User turn started.");
+//        boolean turnActive = true;
+//        while (turnActive) {
+//            System.out.println("What do you want to do next? Type 'help' or 'h' for a list of commands.");
+//            turnActive = handleUserInputs();
+//        }
+//        System.out.println("User turn finished.");
+//    }
+
     private void handleUserInputs() {
-        boolean keepAsking = true;
-        while (keepAsking) {
-            System.out.println("Enter command (type 'exit' to quit, 'h' for help): ");
-            Scanner scanner = new java.util.Scanner(System.in);
-            if (!scanner.hasNext()) {
-                this.carryOn = false;
-                return;
-            }
-            if (!scanner.hasNextLine()) return;
+
+        Scanner scanner = new Scanner(System.in);
+        CommandHandler chain = new CommandChainBuilder()
+                .add(new HelpCommandHandler())
+                .add(new ExitCommandHandler())
+                .add(new ContinueCommandHandler())
+                .add(new ListAnimalsCommandHandler())
+                .add(new ListMapCommandHandler())
+                .add(new SaveCommandHandler())
+                .add(new LoadCommandHandler())
+                .add(new ClearAnimalsCommandHandler())
+                .add(new ClearMapResourcesCommandHandler())
+                .add(new DeleteAnimalCommandHandler())
+                .add(new SpawnCommandHandler())
+                .add(new CreateCommandHandler())
+                .add(new InvalidInputCommandHandler())
+                .build();
+
+        while (!this.turnFinished) {
+            System.out.println("What do you want to do next? Type 'help' or 'h' for a list of commands.");
             String input = scanner.nextLine().trim();
-            if (input.isEmpty()) return;
-            switch (input.toLowerCase()) {
-                case "exit" -> {
-
-                    this.carryOn = false;
-                    System.out.println("Are you sure you want to exit? (yes/no)");
-                    String confirmation = scanner.nextLine().trim().toLowerCase();
-                    if (confirmation.equals("yes") || confirmation.equals("y")) {
-                        keepAsking = false;
-                        carryOn = false;
-                    } else {
-                        break;
-                    }
-
-
-                }
-                case "h", "help" -> {
-                    System.out.println("Available commands:");
-                    System.out.println("  exit - Quit the game");
-                    System.out.println("  h or help - Show this help message");
-                    System.out.println("  create - Create a new animal");
-                    System.out.println("  listAnimals - List all animals");
-                    System.out.println("  listMap - Show map details");
-                    System.out.println("  s or save - Save the game state");
-                    System.out.println("  l or load - Load a saved game state");
-                    System.out.println("  loadPlugin - Loads the expansion plugin");
-                    System.out.println("  unloadPlugin - Unloads the expansion plugin");
-                    System.out.println("  set - Set animal attributes");
-                    System.out.println("  deleteAnimal - Delete an animal by ID");
-                    System.out.println("  clean - Clean the map of all animals");
-                    System.out.println("  cleanResources - Clean the map of all resources");
-                    System.out.println("  deleteResource - Delete a resource at a position");
-                    break;
-                }
-
-                case "create" -> {
-                    createAnimalPrompt(builder, animalRepository);
-                    break;
-                }
-            }
+            chain.handleAndMessage(input, scanner, this);
         }
+        this.turnFinished = false;
+    }
+
+    public void setTurnFinished(boolean finished) {
+        this.turnFinished = finished;
     }
 
     public static void requestExit() {
         System.exit(0);
+
     }
 }

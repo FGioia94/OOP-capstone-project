@@ -1,16 +1,11 @@
 package chainOfResponsibility.commandHandler;
 
-import template.GameLoop.GameLoop;
+import template.Game.GameLoop;
 
 import java.util.Scanner;
 
-public class ListAnimalsCommandHandler implements CommandHandler {
-    private CommandHandler next;
+public class ListAnimalsCommandHandler extends CommandHandler {
 
-    @Override
-    public void setNext(CommandHandler next) {
-        this.next = next;
-    }
 
     @Override
     public boolean handle(String cmd, Scanner scanner, GameLoop gameLoop) {
@@ -21,9 +16,10 @@ public class ListAnimalsCommandHandler implements CommandHandler {
                         ", Position: (" + animal.getPosition().x() + ", " + animal.getPosition().y() + ")" +
                         ", HP: " + animal.getHp() +
                         ", EXP: " + animal.getExp() +
-                        ", Hunger: " + animal.getLevel() +
+                        ", Level: " + animal.getLevel() +
                         "--------------------------");
             });
+            return true;
         }
         return next != null && next.handle(cmd, scanner, gameLoop);
 

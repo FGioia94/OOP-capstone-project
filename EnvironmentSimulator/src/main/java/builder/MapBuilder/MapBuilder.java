@@ -3,11 +3,12 @@ package builder.MapBuilder;
 import factoryMethod.AnimalFactory.Animal;
 import memento.GameSnapshot.MapState;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MapBuilder {
+public class MapBuilder implements Serializable {
 
     private int width;
     private int height;
@@ -63,30 +64,22 @@ public class MapBuilder {
         return this;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public List<Position> getWaterPositions() {
-        return waterPositions;
-    }
-
-    public List<Position> getGrassPositions() {
-        return grassPositions;
-    }
-
-    public List<Position> getObstaclesPositions() {
-        return obstaclesPositions;
-    }
+    public int getWidth() { return width; }
+    public int getHeight() { return height; }
+    public List<Position> getWaterPositions() { return waterPositions; }
+    public List<Position> getGrassPositions() { return grassPositions; }
+    public List<Position> getObstaclesPositions() { return obstaclesPositions; }
 
     public List<Position> getAllValidPositions() {
         List<Position> result = new ArrayList<>();
+        List<Position> occupied = new ArrayList<>();
 
-        MapIterator it = new MapIterator(this.getWidth(), this.getHeight(), this.getObstaclesPositions());
+        occupied.addAll(waterPositions);
+        occupied.addAll(grassPositions);
+        occupied.addAll(obstaclesPositions);
+
+        MapIterator it = new MapIterator(width, height, occupied);
+
         while (it.hasNext()) {
             result.add(it.next());
         }
@@ -94,43 +87,76 @@ public class MapBuilder {
         return result;
     }
 
-    public void spawnElements(int amount, List<Position> elementPositions) {
-        Random random = new java.util.Random();
+    public List<Position> spawnElements(int amount, List<Position> elementPositions) {
+        System.out.println("Spawning " + amount + " elements.");
+        Random random = new Random();
+        List<Position> newPositions = new ArrayList<>(elementPositions);
 
-        for (int i = 0; i <= amount; i++) {
-            List<Position> validPositions = this.getAllValidPositions();
-            int random_position = random.nextInt(validPositions.size());
-            elementPositions.add(validPositions.get(random_position));
+        for (int i = 0; i < amount; i++) {
+            List<Position> valid = getAllValidPositions();
+
+            if (valid.isEmpty()) {
+                System.out.println("No valid positions available to spawn new elements.");
+                break;
+            }
+
+            int index = random.nextInt(valid.size());
+            newPositions.add(valid.get(index));
         }
 
+        return newPositions;
+    }
+
+    public Position getRandomValidPosition() {
+        List<Position> valid = getAllValidPositions();
+        if (valid.isEmpty()) return null;
+
+        Random random = new Random();
+        return valid.get(random.nextInt(valid.size()));
     }
 
     public void moveAnimal(Animal animal) {
-        Random random = new java.util.Random();
-        List<Position> validPositions = this.getAllValidPositions();
-        List<Position> movablePositions = new ArrayList<>();
-        for (Position pos : validPositions) {
-            if ((pos.x() + pos.y()) - (animal.getPosition().x() + animal.getPosition().y()) <= animal.getRange()) {
-                movablePositions.add(pos);
+        List<Position> valid = getAllValidPositions();
+        if (valid.isEmpty()) return;
 
+        List<Position> movable = new ArrayList<>();
+
+        for (Position pos : valid) {
+            int dx = Math.abs(pos.x() - animal.getPosition().x());
+            int dy = Math.abs(pos.y() - animal.getPosition().y());
+            if (dx + dy <= animal.getRange()) {
+                movable.add(pos);
             }
         }
-        int random_index = random.nextInt(validPositions.size());
-        Position selectedPos = movablePositions.get(random_index);
-        animal.setPosition(selectedPos);
+
+        if (movable.isEmpty()) return;
+
+        Random random = new Random();
+        Position selected = movable.get(random.nextInt(movable.size()));
+        animal.setPosition(selected);
     }
 
     public MapState toState() {
         return new MapState(this);
     }
 
-    public static MapBuilder fromState(MapState state) {
-        MapBuilder builder = new MapBuilder();
-        builder.setWidth(state.width());
-        builder.setHeight(state.height());
-        builder.setWaterPositions(state.waterPositions());
-        builder.setGrassPositions(state.grassPositions());
-        builder.setObstaclesPositions(state.obstaclesPositions());
-        return builder;
+    public void fromState(MapState state) {
+        System.out.println("building from state");
+
+        this.width = state.width();
+        this.height = state.height();
+        this.waterPositions = state.waterPositions();
+        this.grassPositions = state.grassPositions();
+        this.obstaclesPositions = state.obstaclesPositions();
+    }
+
+    public void clear() {
+        waterPositions.clear();
+        grassPositions.clear();
+    }
+
+    public void clearAll() {
+        clear();
+        obstaclesPositions.clear();
     }
 }

@@ -1,21 +1,11 @@
 package chainOfResponsibility.commandHandler;
 
-import template.GameLoop.GameLoop;
+import template.Game.GameLoop;
 
 import java.util.Scanner;
 
-public class ExitCommandHandler implements CommandHandler {
-    private CommandHandler next;
-    private final Runnable onExit;
+public class ExitCommandHandler extends CommandHandler {
 
-    public ExitCommandHandler(Runnable onExit) {
-        this.onExit = onExit;
-    }
-
-    @Override
-    public void setNext(CommandHandler next) {
-        this.next = next;
-    }
 
     @Override
     public boolean handle(String cmd, Scanner scanner, GameLoop gameLoop) {
@@ -23,13 +13,10 @@ public class ExitCommandHandler implements CommandHandler {
             System.out.println("Are you sure you want to exit? (yes/no)");
             String confirmation = scanner.hasNextLine() ? scanner.nextLine().trim().toLowerCase() : "";
             if (confirmation.equals("yes") || confirmation.equals("y")) {
-                try {
-                    onExit.run();
-                } finally {
-                    GameLoop.requestExit();
-                }
+                GameLoop.requestExit();
+                return true;
             }
-            return true;
+
         }
         return next != null && next.handle(cmd, scanner, gameLoop);
 

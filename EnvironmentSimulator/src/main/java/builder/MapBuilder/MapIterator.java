@@ -9,20 +9,20 @@ public class MapIterator implements Iterator<Position> {
 
     private final int width;   // number of columns
     private final int height;  // number of rows
-    private final Set<String> obstacles;
+    private final Set<String> occupant;
 
     private int row = 0;       // was currentX
     private int col = 0;       // was currentY
 
-    public MapIterator(int width, int height, List<Position> obstaclesPositions) {
+    public MapIterator(int width, int height, List<Position> occupiedPositions) {
         this.width = width;
         this.height = height;
 
         // Convert obstacles to a fast lookup set
-        this.obstacles = new HashSet<>();
-        for (Position pos : obstaclesPositions) {
+        this.occupant = new HashSet<>();
+        for (Position pos : occupiedPositions) {
             // pos[0] = row, pos[1] = col
-            obstacles.add(pos.x() + "," + pos.y());
+            occupant.add(pos.x() + "," + pos.y());
         }
 
         // Move to the first valid position
@@ -42,20 +42,12 @@ public class MapIterator implements Iterator<Position> {
     }
 
     private void moveToNextValid() {
-        while (row < height) {
-            String key = row + "," + col;
-
-            // If not an obstacle, stop here
-            if (!obstacles.contains(key)) {
-                return;
-            }
-
-            // Move to next coordinate
+        do {
             col++;
             if (col >= width) {
                 col = 0;
                 row++;
             }
-        }
+        } while (row < height && occupant.contains(row + "," + col));
     }
 }
