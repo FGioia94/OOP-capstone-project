@@ -80,24 +80,29 @@ public class GameLoop {
 
 
     private String moveAnimals() {
-        Collection<Animal> animals = animalRepository.getAll();
-        for (Animal animal : animals) {
+        Collection<AnimalComponent> animals = animalRepository.getAll();
+        for (AnimalComponent animal : animals) {
+            if (animal.getPack() != null) {
+                continue;
+            }
             builder.moveAnimal(animal);
         }
         return "Moved " + animals.size() + " animals.\n";
     }
 
     private String attack() {
-        Collection<Animal> animals = animalRepository.getAll();
-        Collection<Animal> carnivores = animalRepository.getAllByType("Carnivore");
-        for (Animal carn : carnivores) {
-            for (Animal target : animals) {
-                if (carn.getPosition().equals(target.getPosition())) {
+        Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
+        Collection<AnimalComponent> carnivores = animalRepository.getAllByType("Carnivore");
+        for (AnimalComponent carn : carnivores) {
+            for (AnimalComponent target : animals) {
+                boolean isNotSamePack = carn.getPack() != null && target.getPack() != null &&
+                        !carn.getPack().equals(target.getPack());
+                if (isNear(carn.getPosition(), target.getPosition()) && isNotSamePack) {
                     System.out.println("Carnivore " + carn.getId() +
                             " found target " + target.getId() +
                             " at position (" + carn.getPosition().x() +
                             ", " + carn.getPosition().y() + ")");
-                    target.hp -= carn.getLevel() * 20;
+                    target.setHp(target.getHp() - (carn.getLevel() * 20));
                     carn.setExp(carn.getExp() + 40);
                     carn.setHp(carn.getHp() + 40);
                     System.out.println("carnivore " + carn.getId() +
@@ -109,10 +114,16 @@ public class GameLoop {
         return "Carnivores attacked nearby animals.\n";
     }
 
+    private boolean isNear(Position a, Position b) {
+        int dx = Math.abs(a.x() - b.x());
+        int dy = Math.abs(a.y() - b.y());
+        return dx <= 1 && dy <= 1; // 8‑direction adjacency
+    }
+
     private String processHunger() {
 
-        Collection<Animal> animals = animalRepository.getAll();
-        for (Animal animal : animals) {
+        Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
+        for (AnimalComponent animal : animals) {
             if (animal.getAnimalType().equals("Herbivore")) {
                 animal.setHp(animal.getHp() - 5);
             } else {
@@ -124,10 +135,10 @@ public class GameLoop {
 
 
     private String checkLifePoints() {
-        Collection<Animal> animals = animalRepository.getAll();
+        Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
         List<String> toRemove = new ArrayList<>();
 
-        for (Animal animal : animals) {
+        for (AnimalComponent animal : animals) {
             if (animal.getHp() <= 0) {
                 toRemove.add(animal.getId());
             }
@@ -142,11 +153,11 @@ public class GameLoop {
 
 
     private String consumeResources() {
-        Collection<Animal> animals = animalRepository.getAll();
+        Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
         List<Position> grassPositions = builder.getGrassPositions();
         List<Position> waterPositions = builder.getWaterPositions();
 
-        for (Animal animal : animals) {
+        for (AnimalComponent animal : animals) {
             if (Objects.equals(animal.getAnimalType(), "Herbivore")) {
                 for (Position grassPos : grassPositions) {
                     if (animal.getPosition() == grassPos) {
@@ -175,8 +186,8 @@ public class GameLoop {
     private String reproduce() {
         AnimalFactory factory;
         boolean message = false;
-        for (Animal animal : animalRepository.getAll()) {
-            for (Animal partner : animalRepository.getAllByType(animal.getAnimalType())) {
+        for (AnimalComponent animal : animalRepository.getAllExceptPacks()) {
+            for (AnimalComponent partner : animalRepository.getAllByType(animal.getAnimalType())) {
                 if (!Objects.equals(animal.getSex(), partner.getSex()) && animal.getPosition() == partner.getPosition()) {
 
                     factory = Objects.equals(animal.getAnimalType(), "Carnivore") ? new CarnivoreFactory() : new HerbivoreFactory();
@@ -203,7 +214,7 @@ public class GameLoop {
     }
 
     private String assignExp() {
-        for (Animal animal : animalRepository.getAll()) {
+        for (AnimalComponent animal : animalRepository.getAllExceptPacks()) {
             if (animal.getExp() >= 100) {
                 animal.setLevel(animal.getLevel() + 1);
                 animal.setExp(animal.getExp() - 100);
@@ -237,6 +248,8 @@ public class GameLoop {
                 .add(new ClearAnimalsCommandHandler())
                 .add(new ClearMapResourcesCommandHandler())
                 .add(new DeleteAnimalCommandHandler())
+                .add(new PackCommandHandler())
+                .add(new ListPacksCommandHandler())
                 .add(new SpawnCommandHandler())
                 .add(new CreateCommandHandler())
                 .add(new InvalidInputCommandHandler())

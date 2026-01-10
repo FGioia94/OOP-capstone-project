@@ -14,7 +14,7 @@ public class ListMapCommandHandler extends CommandHandler {
                     "Water amount: " + gameLoop.builder.getWaterPositions().size() +
                     ", Grass amount: " + gameLoop.builder.getGrassPositions().size() +
                     ", Obstacle amount: " + gameLoop.builder.getObstaclesPositions().size() +
-                    ", Animals amount: " + gameLoop.animalRepository.getAll().size());
+                    ", Animals amount: " + gameLoop.animalRepository.getAllExceptPacks().size());
             return true;
         }
         return next != null && next.handle(cmd, scanner, gameLoop);

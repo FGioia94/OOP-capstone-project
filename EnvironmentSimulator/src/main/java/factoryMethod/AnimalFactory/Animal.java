@@ -4,7 +4,6 @@ import builder.MapBuilder.Position;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class Animal implements AnimalComponent {
     private int exp;
@@ -17,6 +16,7 @@ public abstract class Animal implements AnimalComponent {
     public Position position = new Position(0, 0);
     public int hp;
     public final String animalType;
+    private String pack;
 
     public Animal(
             String id,
@@ -35,6 +35,7 @@ public abstract class Animal implements AnimalComponent {
         this.exp = exp;
         this.level = level;
         this.animalType = animalType;
+        this.pack = null;
     }
 
     @Override
@@ -98,6 +99,20 @@ public abstract class Animal implements AnimalComponent {
         return animalType;
     }
 
+    @Override
+    public String getPack() {
+        return pack;
+    }
+
+    @Override
+    public void setPack(String pack) {
+        this.pack = pack;
+    }
+
+    @Override
+    public List<AnimalComponent> getMembers() {
+        return new ArrayList<>();
+    }
 
     abstract Animal reproduce();
 }

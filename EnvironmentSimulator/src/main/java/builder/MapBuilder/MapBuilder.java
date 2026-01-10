@@ -1,6 +1,7 @@
 package builder.MapBuilder;
 
 import factoryMethod.AnimalFactory.Animal;
+import factoryMethod.AnimalFactory.AnimalComponent;
 import memento.GameSnapshot.MapState;
 
 import java.io.Serializable;
@@ -115,16 +116,16 @@ public class MapBuilder implements Serializable {
         return valid.get(random.nextInt(valid.size()));
     }
 
-    public void moveAnimal(Animal animal) {
+    public void moveAnimal(AnimalComponent animalComponent) {
         List<Position> valid = getAllValidPositions();
         if (valid.isEmpty()) return;
 
         List<Position> movable = new ArrayList<>();
 
         for (Position pos : valid) {
-            int dx = Math.abs(pos.x() - animal.getPosition().x());
-            int dy = Math.abs(pos.y() - animal.getPosition().y());
-            if (dx + dy <= animal.getRange()) {
+            int dx = Math.abs(pos.x() - animalComponent.getPosition().x());
+            int dy = Math.abs(pos.y() - animalComponent.getPosition().y());
+            if (dx + dy <= animalComponent.getRange()) {
                 movable.add(pos);
             }
         }
@@ -133,7 +134,7 @@ public class MapBuilder implements Serializable {
 
         Random random = new Random();
         Position selected = movable.get(random.nextInt(movable.size()));
-        animal.setPosition(selected);
+        animalComponent.setPosition(selected);
     }
 
     public MapState toState() {

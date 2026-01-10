@@ -2,7 +2,12 @@ package factoryMethod.AnimalFactory;
 
 import builder.MapBuilder.Position;
 
-public interface AnimalComponent {
+import java.io.Serializable;
+import java.util.List;
+
+public interface AnimalComponent extends Serializable {
+
+
     Position getPosition();
 
     void setPosition(Position position);
@@ -27,5 +32,10 @@ public interface AnimalComponent {
 
     int getRange();
 
+    String getPack();
 
+    void setPack(String pack);
+
+
+    List<AnimalComponent> getMembers();
 }

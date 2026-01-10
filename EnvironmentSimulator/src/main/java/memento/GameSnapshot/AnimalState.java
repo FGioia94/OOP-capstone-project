@@ -2,6 +2,7 @@ package memento.GameSnapshot;
 
 import builder.MapBuilder.Position;
 import factoryMethod.AnimalFactory.Animal;
+import factoryMethod.AnimalFactory.AnimalComponent;
 
 import java.io.Serializable;
 
@@ -13,10 +14,11 @@ public record AnimalState(
         int hp,
         int exp,
         int level,
-        String animalType
+        String animalType,
+        String pack
 ) implements Serializable {
 
-    public AnimalState(Animal animal) {
+    public AnimalState(AnimalComponent animal) {
         this(
                 animal.getId(),
                 animal.getRange(),
@@ -25,7 +27,8 @@ public record AnimalState(
                 animal.getHp(),
                 animal.getExp(),
                 animal.getLevel(),
-                animal.getAnimalType()
+                animal.getAnimalType(),
+                animal.getPack() != null ? animal.getPack() : null
         );
     }
 }

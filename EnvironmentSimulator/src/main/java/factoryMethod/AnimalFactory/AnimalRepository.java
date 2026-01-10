@@ -10,9 +10,9 @@ import java.util.*;
 
 public class AnimalRepository implements Serializable {
 
-    private final Map<String, Animal> animals = new HashMap<>();
+    private final Map<String, AnimalComponent> animals = new HashMap<>();
 
-    public void add(Animal animal) {
+    public void add(AnimalComponent animal) {
         animals.put(animal.getId(), animal);
     }
 
@@ -20,11 +20,11 @@ public class AnimalRepository implements Serializable {
         animals.clear();
     }
 
-    public Animal get(String id) {
+    public AnimalComponent get(String id) {
         return animals.get(id);
     }
 
-    public Collection<Animal> getAll() {
+    public Collection<AnimalComponent> getAll() {
         return animals.values();
     }
 
@@ -32,10 +32,10 @@ public class AnimalRepository implements Serializable {
         animals.remove(id);
     }
 
-    public Collection<Animal> getAllByType(String type) {
-        Collection<Animal> result = new ArrayList<>();
-        for (Animal animal : animals.values()) {
-            if (animal.animalType.equals(type)) {
+    public Collection<AnimalComponent> getAllByType(String type) {
+        Collection<AnimalComponent> result = new ArrayList<>();
+        for (AnimalComponent animal : animals.values()) {
+            if (animal.getAnimalType().equals(type)) {
                 result.add(animal);
             }
         }
@@ -44,45 +44,72 @@ public class AnimalRepository implements Serializable {
 
     public AnimalRepositoryState toState() {
         List<AnimalState> animalStates = new ArrayList<>();
-        for (Animal animal : this.getAll()) {
+        for (AnimalComponent animal : this.getAll()) {
             System.out.println(animal);
             animalStates.add(new AnimalState(animal));
         }
         return new AnimalRepositoryState(animalStates);
     }
 
-    public void fromState(AnimalRepositoryState state) throws IllegalArgumentException {
-        this.animals.clear();
-        AnimalFactory factory = null;
-        System.out.println("creating animals from state");
-        System.out.println(this.getAll());
+    public void fromState(AnimalRepositoryState state) {
+        animals.clear();
 
-        for (AnimalState animalState : state.animals()) {
-            switch (animalState.animalType()) {
-                case "Carnivore" -> {
-                    factory = new CarnivoreFactory();
-                }
-                case "Herbivore" -> {
-                    factory = new HerbivoreFactory();
-                }
-                default -> {
-                    throw new IllegalArgumentException("Unknown animal type: "
-                            + animalState.animalType());
+        Map<String, AnimalPack> packMap = new HashMap<>();
+
+        for (AnimalState s : state.animals()) {
+            if (s.animalType().equals("Pack")) {
+                AnimalPack pack = new AnimalPack(s.id());
+                packMap.put(s.id(), pack);
+                this.add(pack);
+            }
+        }
+
+
+        for (AnimalState s : state.animals()) {
+            if (!s.animalType().equals("Pack")) {
+
+                AnimalFactory factory = switch (s.animalType()) {
+                    case "Carnivore" -> new CarnivoreFactory();
+                    case "Herbivore" -> new HerbivoreFactory();
+                    default -> throw new IllegalArgumentException("Unknown type: " + s.animalType());
+                };
+
+                AnimalComponent animal = factory.createAnimalFromState(this, s);
+
+
+                if (s.pack() != null) {
+                    AnimalPack pack = packMap.get(s.pack());
+
+                    if (pack == null) {
+                        throw new IllegalStateException("Pack " + s.pack() + " not found during load");
+                    }
+
+                    pack.add(animal);
+                    animal.setPack(s.pack());
                 }
             }
-            factory.createAnimalFromState(this, animalState);
-            System.out.println(this.getAll());
-
         }
-        System.out.println(this.getAll());
-
     }
 
     public List<String> listAll() {
         List<String> listOfIds = new ArrayList<>();
-        for (Animal animal : this.getAll()) {
+        for (AnimalComponent animal : this.getAll()) {
             listOfIds.add(animal.getId());
         }
         return listOfIds;
+    }
+
+    public List<AnimalComponent> getAllExceptPacks() {
+        List<AnimalComponent> result = new ArrayList<>();
+        for (AnimalComponent animal : animals.values()) {
+            if (!(animal instanceof AnimalPack)) {
+                result.add(animal);
+            }
+        }
+        return result;
+    }
+
+    public AnimalComponent getAnimalById(String id) {
+        return animals.get(id);
     }
 }
