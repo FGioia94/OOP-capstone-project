@@ -25,7 +25,15 @@ public class SpawnCommandHandler extends CommandHandler {
             Map<String, String> specs = askSpecs(scanner);
 
             String type = specs.get("type");
-            int amount = Integer.parseInt(specs.get("amount"));
+            int amount;
+            
+            try {
+                amount = Integer.parseInt(specs.get("amount"));
+            } catch (NumberFormatException e) {
+                logger.error("Invalid amount format: {}", specs.get("amount"), e);
+                System.out.println("Invalid amount. Operation cancelled.");
+                return true;
+            }
 
             logger.debug("User selected type='{}', amount={}", type, amount);
 
@@ -159,18 +167,19 @@ public class SpawnCommandHandler extends CommandHandler {
             String amountInput = scanner.nextLine().trim();
 
             try {
-                amount = amountInput;
-                validInput = !amount.equals("0");
-
-                if (!validInput) {
+                int amountInt = Integer.parseInt(amountInput);
+                
+                if (amountInt <= 0) {
                     logger.warn("User entered invalid amount: {}", amountInput);
                     System.out.println("Invalid amount. Please enter a number > 0.");
                 } else {
+                    amount = amountInput;
+                    validInput = true;
                     logger.debug("User selected amount: {}", amount);
                 }
 
             } catch (NumberFormatException e) {
-                logger.error("Invalid number format for amount: {}", amountInput);
+                logger.error("Invalid number format for amount: {}", amountInput, e);
                 System.out.println("Invalid amount. Please enter a number > 0.");
             }
         }

@@ -143,6 +143,11 @@ public class MapBuilder implements Serializable {
     }
 
     public void moveAnimal(AnimalComponent animalComponent) {
+        // Validate current position
+        if (animalComponent.getPosition() != null) {
+            annotations.PositionValidator.validateDefault(animalComponent.getPosition());
+        }
+        
         List<Position> valid = getAllValidPositions();
         if (valid.isEmpty()) {
             logger.warn("No valid positions available for movement");

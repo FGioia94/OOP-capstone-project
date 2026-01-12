@@ -1,5 +1,6 @@
 package strategy.IO;
 
+import exceptionShielding.ExceptionShieldingLayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,26 +14,14 @@ public class JsonReadStrategy implements ReadStrategy<String> {
 
     @Override
     public String read(String filePath) {
-
         logger.info("Reading JSON snapshot from '{}'", filePath);
 
-        Path path = Paths.get(filePath);
-
-        try {
+        // Use exception shielding to convert low-level I/O exceptions
+        return ExceptionShieldingLayer.shieldRead(() -> {
+            Path path = Paths.get(filePath);
             String json = Files.readString(path);
-
             logger.debug("Successfully read {} characters from '{}'", json.length(), filePath);
-
             return json;
-
-        } catch (Exception e) {
-
-            logger.error("Failed to read JSON snapshot from '{}': {}", filePath, e.getMessage(), e);
-
-            throw new ReadException(
-                    "Unable to read JSON snapshot from file: " + filePath,
-                    e
-            );
-        }
+        }, filePath);
     }
 }

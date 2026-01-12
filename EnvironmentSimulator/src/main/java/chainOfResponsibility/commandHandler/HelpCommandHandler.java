@@ -25,12 +25,12 @@ public class HelpCommandHandler extends CommandHandler {
             System.out.println("  deleteAnimal - Delete an animal by ID");
             System.out.println("  exit - Quit the game");
             System.out.println("  h or help - Show this help message");
+            System.out.println("  inspect - [ADMIN ONLY] Inspect animals using reflection");
             System.out.println("  l or load - Load a saved game state");
             System.out.println("  listAnimals - List all animals");
             System.out.println("  listMap - Show map details");
             System.out.println("  listPacks - List all animal packs");
             System.out.println("  s or save - Save the game state");
-            System.out.println("  set - Set animal attributes");
             System.out.println("  spawn - Spawn resources on the map");
             System.out.println("  pack - Packs animals into groups");
 

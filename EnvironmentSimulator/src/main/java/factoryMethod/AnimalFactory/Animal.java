@@ -67,7 +67,9 @@ public abstract class Animal implements AnimalComponent {
     }
 
     @Override
-    public void setPosition(Position position) {
+    public void setPosition(@annotations.ValidPosition(message = "Invalid animal position") Position position) {
+        // Validate using annotation
+        annotations.PositionValidator.validateDefault(position);
         logger.debug("Animal ID={} moved from {} to {}", id, this.position, position);
         this.position = position;
     }

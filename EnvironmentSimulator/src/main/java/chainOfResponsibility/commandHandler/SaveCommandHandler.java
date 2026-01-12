@@ -64,10 +64,9 @@ public class SaveCommandHandler extends CommandHandler {
 
             } catch (Exception e) {
 
-                logger.error("Failed to save game to '{}.{}': {}", fileName, format, e.getMessage());
-                System.out.println("Failed to save the game. Check logs for details.");
-
-                throw new RuntimeException(e);
+                logger.error("Failed to save game to '{}.{}': {}", fileName, format, e.getMessage(), e);
+                System.out.println("Failed to save the game: " + e.getMessage());
+                return true;
             }
         }
 

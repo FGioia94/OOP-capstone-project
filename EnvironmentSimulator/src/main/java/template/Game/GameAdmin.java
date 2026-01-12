@@ -18,7 +18,7 @@ public class GameAdmin extends Game {
 
     @Override
     protected void runGameLoop(MapBuilder builder, AnimalRepository repository) {
-        this.gameLoop = new GameLoop(builder, repository);
+        this.gameLoop = new GameLoop(builder, repository, true); // Pass true for admin mode
         logger.debug("Running admin game loop with full verbosity...");
         gameLoop.run();
     }

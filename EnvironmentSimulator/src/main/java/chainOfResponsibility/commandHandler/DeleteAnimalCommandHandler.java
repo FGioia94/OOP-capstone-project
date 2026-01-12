@@ -40,10 +40,14 @@ public class DeleteAnimalCommandHandler extends CommandHandler {
                     System.out.println("Animal with ID " + idInput + " has been deleted.");
                     return true;
 
+                } catch (AnimalNotFoundException e) {
+                    logger.error("Failed to delete animal with ID '{}': Animal not found.", idInput, e);
+                    System.out.println("Animal with ID " + idInput + " not found.");
+                    return true;
                 } catch (Exception e) {
-
-                    logger.error("Failed to delete animal with ID '{}'. Throwing AnimalNotFoundException.", idInput);
-                    throw new AnimalNotFoundException(idInput, gameLoop.animalRepository);
+                    logger.error("Unexpected error deleting animal with ID '{}': {}", idInput, e.getMessage(), e);
+                    System.out.println("Failed to delete animal: " + e.getMessage());
+                    return true;
                 }
             }
         }

@@ -59,10 +59,9 @@ public class LoadCommandHandler extends CommandHandler {
 
             } catch (Exception e) {
 
-                logger.error("Failed to load game from '{}.{}': {}", fileName, format, e.getMessage());
-
-                System.out.println("Failed to load the game. Check logs for details.");
-                throw new RuntimeException(e);
+                logger.error("Failed to load game from '{}.{}': {}", fileName, format, e.getMessage(), e);
+                System.out.println("Failed to load the game: " + e.getMessage());
+                return true;
             }
         }
 

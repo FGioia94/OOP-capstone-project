@@ -1,6 +1,7 @@
 package strategy.IO;
 
 import com.google.gson.Gson;
+import exceptionShielding.ExceptionShieldingLayer;
 import memento.GameSnapshot.GameSnapshot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,24 +12,13 @@ public class JsonSerializationStrategy implements SerializationStrategy<String> 
 
     @Override
     public String serialize(GameSnapshot snapshot) {
-
         logger.info("Serializing GameSnapshot to JSON format");
 
-        try {
+        // Use exception shielding to convert low-level serialization exceptions
+        return ExceptionShieldingLayer.shieldSerialization(() -> {
             String json = new Gson().toJson(snapshot);
-
             logger.debug("GameSnapshot serialized into {} characters", json.length());
-
             return json;
-
-        } catch (Exception e) {
-
-            logger.error("JSON serialization failed: {}", e.getMessage(), e);
-
-            throw new SerializationException(
-                    "Failed to serialize GameSnapshot to JSON format",
-                    e
-            );
-        }
+        }, "GameSnapshot to JSON");
     }
 }

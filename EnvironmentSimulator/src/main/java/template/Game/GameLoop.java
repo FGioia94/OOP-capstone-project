@@ -1,5 +1,6 @@
 package template.Game;
 
+import annotations.AdminAnnotationChecker;
 import builder.MapBuilder.MapBuilder;
 import builder.MapBuilder.Position;
 import chainOfResponsibility.commandHandler.*;
@@ -17,6 +18,7 @@ public class GameLoop {
     private boolean turnFinished;
     private int tick;
     private int resourcesRespawnPerCycle = 6;
+    private final boolean adminMode;
 
     private final List<GameObserver> observers = new ArrayList<>();
     private RecapObserver recapObserver;
@@ -25,11 +27,17 @@ public class GameLoop {
     public final AnimalRepository animalRepository;
 
     public GameLoop(MapBuilder builder, AnimalRepository animalRepository) {
+        this(builder, animalRepository, false);
+    }
+
+    public GameLoop(MapBuilder builder, AnimalRepository animalRepository, boolean adminMode) {
         this.carryOn = true;
         this.turnFinished = false;
         this.tick = 0;
         this.builder = builder;
         this.animalRepository = animalRepository;
+        this.adminMode = adminMode;
+        logger.debug("GameLoop initialized with adminMode={}", adminMode);
     }
 
     public void addObserver(GameObserver observer) {
@@ -333,7 +341,7 @@ public class GameLoop {
 
         Scanner scanner = new Scanner(System.in);
 
-        CommandHandler chain = new CommandChainBuilder()
+        CommandChainBuilder chainBuilder = new CommandChainBuilder()
                 .add(new HelpCommandHandler())
                 .add(new ExitCommandHandler())
                 .add(new ContinueCommandHandler())
@@ -347,14 +355,32 @@ public class GameLoop {
                 .add(new PackCommandHandler())
                 .add(new ListPacksCommandHandler())
                 .add(new SpawnCommandHandler())
-                .add(new CreateCommandHandler())
+                .add(new CreateCommandHandler());
+
+        // Add admin-only handlers based on @AdminOnly annotation
+        InspectCommandHandler inspectHandler = new InspectCommandHandler();
+        if (adminMode && AdminAnnotationChecker.requiresAdminMode(inspectHandler)) {
+            logger.info("Admin mode: Adding InspectCommandHandler (verified via @AdminOnly annotation)");
+            chainBuilder.add(inspectHandler);
+        } else if (!adminMode && AdminAnnotationChecker.requiresAdminMode(inspectHandler)) {
+            logger.debug("Skipping InspectCommandHandler - requires admin mode (@AdminOnly)");
+        }
+
+        CommandHandler chain = chainBuilder
                 .add(new InvalidInputCommandHandler())
                 .build();
         try {
             while (!turnFinished) {
                 System.out.println("Awaiting command (type 'help' or 'h' for list)");
                 String input = scanner.nextLine().trim();
-                chain.handleAndMessage(input, scanner, this);
+                try {
+                    chain.handleAndMessage(input, scanner, this);
+                } catch (Exception e) {
+                    // Exception shielding: catch any unhandled exceptions to prevent stack trace exposure
+                    logger.error("Unexpected error handling command '{}': {}", input, e.getMessage(), e);
+                    System.out.println("An error occurred: " + e.getMessage());
+                    System.out.println("The game will continue. Type 'help' for available commands.");
+                }
             }
         } catch (NoSuchElementException e) {
             // IntelliJ or the terminal closed the input stream
