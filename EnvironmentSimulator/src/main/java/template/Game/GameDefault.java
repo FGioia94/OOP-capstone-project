@@ -7,13 +7,12 @@ import org.apache.logging.log4j.core.config.Configurator;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class GameDefault extends Game {
 
     @Override
     protected void initializeGame() {
-        Configurator.setLevel(getClass().getName(), Level.INFO);
+        Configurator.setRootLevel(Level.OFF);
     }
 
     @Override
@@ -36,23 +35,26 @@ public class GameDefault extends Game {
     protected void initialSetup() {
 
         Map<String, Integer> values = askAnimalAmounts();
+
         builder.setWidth(values.get("width"));
         builder.setHeight(values.get("height"));
-        System.out.println("Building map of size " + values.get("width") + "x" + values.get("height"));
-        builder.getObstaclesPositions();
-        logger.info("obstacles");
-        builder.setObstaclesPositions(builder.spawnElements(values.get("obstacles"), builder.getObstaclesPositions()));
-        logger.info("obstaclesSet");
 
-        builder.setGrassPositions(builder.spawnElements(values.get("grass"), builder.getGrassPositions()));
-        builder.setWaterPositions(builder.spawnElements(values.get("water"), builder.getWaterPositions()));
+        builder.setObstaclesPositions(
+                builder.spawnElements(values.get("obstacles"), builder.getObstaclesPositions())
+        );
 
-        logger.info("Map built with dimensions {}x{}, obstacles: {}, grass: {}, water: {}",
-                values.get("width"), values.get("height"),
-                values.get("obstacles"), values.get("grass"), values.get("water"));
+        builder.setGrassPositions(
+                builder.spawnElements(values.get("grass"), builder.getGrassPositions())
+        );
+
+        builder.setWaterPositions(
+                builder.spawnElements(values.get("water"), builder.getWaterPositions())
+        );
+
     }
 
     private Map<String, Integer> askAnimalAmounts() {
+        // Default values for non-admin mode
         return new HashMap<>(Map.of(
                 "width", 20,
                 "height", 20,

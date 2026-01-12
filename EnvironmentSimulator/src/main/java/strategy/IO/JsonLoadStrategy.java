@@ -1,21 +1,40 @@
 package strategy.IO;
 
 import memento.GameSnapshot.GameSnapshot;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class JsonLoadStrategy implements LoadStrategy {
+
+    private static final Logger logger = LogManager.getLogger(JsonLoadStrategy.class);
+
     @Override
-    public GameSnapshot load(String filePath) throws Exception {
+    public GameSnapshot load(String filePath) {
+
+        logger.info("Loading GameSnapshot from JSON file '{}'", filePath);
+
         JsonReadStrategy readStrategy = new JsonReadStrategy();
         JsonDeserializationStrategy deserializationStrategy = new JsonDeserializationStrategy();
 
         try {
             String jsonData = readStrategy.read(filePath);
-            return deserializationStrategy.deserialize(jsonData);
+
+            logger.debug("Read {} characters from '{}'", jsonData.length(), filePath);
+
+            GameSnapshot snapshot = deserializationStrategy.deserialize(jsonData);
+
+            logger.info("JSON load completed successfully for '{}'", filePath);
+
+            return snapshot;
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
+
+            logger.error("Failed to load GameSnapshot from JSON file '{}': {}", filePath, e.getMessage(), e);
+
+            throw new LoadException(
+                    "Unable to load GameSnapshot from JSON file: " + filePath,
+                    e
+            );
         }
     }
 }

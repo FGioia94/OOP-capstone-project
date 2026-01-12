@@ -1,6 +1,8 @@
 package strategy.IO;
 
 import memento.GameSnapshot.GameSnapshot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,7 +10,14 @@ import java.nio.file.Paths;
 
 public class SaveGame {
 
-    public static void save(String fileName, GameSnapshot snapshot, String type) throws Exception {
+    private static final Logger logger = LogManager.getLogger(SaveGame.class);
+
+    public static void save(String fileName, GameSnapshot snapshot, String type) {
+
+        logger.info("Requested save of '{}' as type '{}'", fileName, type);
+
+        // Normalize type
+        type = type.toLowerCase();
 
         // Project root (EnvironmentSimulator/)
         String projectRoot = System.getProperty("user.dir");
@@ -16,15 +25,21 @@ public class SaveGame {
         // Full path to src/data/saved
         Path saveDir = Paths.get(projectRoot, "src", "data", "saved");
 
-        // Ensure directory exists
-        if (!Files.exists(saveDir)) {
-            Files.createDirectories(saveDir);
+        try {
+            if (!Files.exists(saveDir)) {
+                logger.warn("Save directory '{}' does not exist. Creating it.", saveDir);
+                Files.createDirectories(saveDir);
+            }
+        } catch (Exception e) {
+            logger.error("Failed to create save directory '{}': {}", saveDir, e.getMessage(), e);
+            throw new SaveException("Unable to create save directory: " + saveDir, e);
         }
 
         // Select strategy
         SaveStrategy strategy;
         String extension;
-        switch (type.toLowerCase()) {
+
+        switch (type) {
             case "json":
                 strategy = new JsonSaveStrategy();
                 extension = ".json";
@@ -36,6 +51,7 @@ public class SaveGame {
                 break;
 
             default:
+                logger.error("Unsupported file type '{}'", type);
                 throw new IllegalArgumentException("Unsupported file type: " + type);
         }
 
@@ -43,11 +59,17 @@ public class SaveGame {
             fileName = fileName + extension;
         }
 
-        // Build full file path by joining saveDir and fileName
         Path fullPath = saveDir.resolve(fileName);
 
-        // Save
-        strategy.save(snapshot, fullPath.toString());
-        System.out.println("Game saved to " + fullPath.toString());
+        logger.debug("Full resolved save path: '{}'", fullPath);
+
+        try {
+            strategy.save(snapshot, fullPath.toString());
+            logger.info("Game successfully saved to '{}'", fullPath);
+
+        } catch (Exception e) {
+            logger.error("Failed to save game to '{}': {}", fullPath, e.getMessage(), e);
+            throw new SaveException("Unable to save game to: " + fullPath, e);
+        }
     }
 }

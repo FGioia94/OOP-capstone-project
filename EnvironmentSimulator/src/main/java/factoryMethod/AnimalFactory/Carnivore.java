@@ -1,10 +1,13 @@
 package factoryMethod.AnimalFactory;
 
 import builder.MapBuilder.Position;
-
-import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Carnivore extends Animal {
+
+    private static final Logger logger = LogManager.getLogger(Carnivore.class);
+
     public Carnivore(
             String id,
             Position position,
@@ -12,14 +15,16 @@ public class Carnivore extends Animal {
             int hp,
             int exp,
             int level) {
-        int range = 5;
-        String animalType = "Carnivore";
-        super(id, range, position, sex, hp, exp, level, animalType);
-    }
 
+        super(id, 5, position, sex, hp, exp, level, "Carnivore");
+
+        logger.info("Carnivore created: ID={}, Sex={}, Pos={}, HP={}, EXP={}, LVL={}",
+                id, sex, position, hp, exp, level);
+    }
 
     @Override
     Animal reproduce() {
+        logger.debug("Carnivore ID={} attempted reproduction, but reproduce() is not implemented.", getId());
         return null;
     }
 }

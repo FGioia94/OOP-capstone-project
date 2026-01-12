@@ -1,24 +1,44 @@
 package chainOfResponsibility.commandHandler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import template.Game.GameLoop;
 
 import java.util.Scanner;
 
 public class ListMapCommandHandler extends CommandHandler {
 
+    private static final Logger logger = LogManager.getLogger(ListMapCommandHandler.class);
 
     @Override
     public boolean handle(String cmd, Scanner scanner, GameLoop gameLoop) {
+
         if (cmd.equalsIgnoreCase("listMap")) {
-            System.out.println("Map Details: + " +
-                    "Water amount: " + gameLoop.builder.getWaterPositions().size() +
-                    ", Grass amount: " + gameLoop.builder.getGrassPositions().size() +
-                    ", Obstacle amount: " + gameLoop.builder.getObstaclesPositions().size() +
-                    ", Animals amount: " + gameLoop.animalRepository.getAllExceptPacks().size());
+
+            logger.info("ListMap command received.");
+
+            int water = gameLoop.builder.getWaterPositions().size();
+            int grass = gameLoop.builder.getGrassPositions().size();
+            int obstacles = gameLoop.builder.getObstaclesPositions().size();
+            int animals = gameLoop.animalRepository.getAllExceptPacks().size();
+
+            logger.debug("Map stats -> water={}, grass={}, obstacles={}, animals={}",
+                    water, grass, obstacles, animals);
+
+            System.out.println(
+                    "Map Details: + " +
+                            "Water amount: " + water +
+                            ", Grass amount: " + grass +
+                            ", Obstacle amount: " + obstacles +
+                            ", Animals amount: " + animals
+            );
+
             return true;
         }
+
+        logger.trace("Command '{}' not handled by {}. Passing to next handler.",
+                cmd, this.getClass().getSimpleName());
+
         return next != null && next.handle(cmd, scanner, gameLoop);
-
     }
-
 }

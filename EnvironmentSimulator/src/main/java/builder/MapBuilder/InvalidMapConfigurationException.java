@@ -1,8 +1,12 @@
 package builder.MapBuilder;
 
 import java.text.MessageFormat;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class InvalidMapConfigurationException extends Exception {
+
+    private static final Logger logger = LogManager.getLogger(InvalidMapConfigurationException.class);
 
     public InvalidMapConfigurationException(
             boolean isWidthValid,
@@ -20,6 +24,15 @@ public class InvalidMapConfigurationException extends Exception {
                 isGrassValid,
                 isObstaclesValid
         ));
+
+        logger.debug(
+                "InvalidMapConfigurationException thrown: widthValid={}, width={}, heightValid={}, height={}, waterValid={}, grassValid={}, obstaclesValid={}",
+                isWidthValid, width,
+                isHeightValid, height,
+                isWaterValid,
+                isGrassValid,
+                isObstaclesValid
+        );
     }
 
     private static String buildMessage(

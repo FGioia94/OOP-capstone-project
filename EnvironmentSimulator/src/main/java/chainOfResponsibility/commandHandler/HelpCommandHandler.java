@@ -1,15 +1,22 @@
 package chainOfResponsibility.commandHandler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import template.Game.GameLoop;
 
 import java.util.Scanner;
 
 public class HelpCommandHandler extends CommandHandler {
 
+    private static final Logger logger = LogManager.getLogger(HelpCommandHandler.class);
 
     @Override
     public boolean handle(String cmd, Scanner scanner, GameLoop gameLoop) {
+
         if (cmd.equalsIgnoreCase("h") || cmd.equalsIgnoreCase("help")) {
+
+            logger.info("Help command received. Displaying available commands.");
+
             System.out.println("Available commands:");
             System.out.println("  c or continue - Finish the current turn");
             System.out.println("  clearAnimals - Clean the map of all animals");
@@ -26,10 +33,13 @@ public class HelpCommandHandler extends CommandHandler {
             System.out.println("  set - Set animal attributes");
             System.out.println("  spawn - Spawn resources on the map");
             System.out.println("  pack - Packs animals into groups");
+
             return true;
         }
+
+        logger.trace("Command '{}' not handled by {}. Passing to next handler.",
+                cmd, this.getClass().getSimpleName());
+
         return next != null && next.handle(cmd, scanner, gameLoop);
-
     }
-
 }

@@ -1,7 +1,6 @@
 package template.Game;
 
 import builder.MapBuilder.MapBuilder;
-import builder.MapBuilder.Position;
 import factoryMethod.AnimalFactory.AnimalRepository;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
@@ -12,8 +11,7 @@ public class GameAdmin extends Game {
 
     @Override
     protected void initializeGame() {
-        Configurator.setLevel(getClass().getName(), Level.DEBUG);
-
+        Configurator.setRootLevel(Level.DEBUG);
         logger.debug("Admin mode: logging set to DEBUG level");
         logger.info("Initializing admin game...");
     }
@@ -21,8 +19,8 @@ public class GameAdmin extends Game {
     @Override
     protected void runGameLoop(MapBuilder builder, AnimalRepository repository) {
         this.gameLoop = new GameLoop(builder, repository);
-        gameLoop.run();
         logger.debug("Running admin game loop with full verbosity...");
+        gameLoop.run();
     }
 
     @Override
@@ -33,50 +31,69 @@ public class GameAdmin extends Game {
 
     @Override
     protected AnimalRepository createAnimalRepository() {
+        logger.debug("Creating AnimalRepository...");
         return new AnimalRepository();
     }
 
     @Override
     protected void initialSetup() {
         logger.debug("Performing initial setup for admin game");
-        Map<String, Integer> values = askAnimalAmounts();
-        logger.debug("User provided setup values: {}", values.toString());
+
+        Map<String, Integer> values = ask();
+        logger.debug("User provided setup values: {}", values);
+
         builder.setWidth(values.get("width"));
         builder.setHeight(values.get("height"));
         builder.setObstaclesPositions(builder.spawnElements(values.get("obstacles"), builder.getObstaclesPositions()));
         builder.setGrassPositions(builder.spawnElements(values.get("grass"), builder.getGrassPositions()));
         builder.setWaterPositions(builder.spawnElements(values.get("water"), builder.getWaterPositions()));
+
         logger.info("Map built with dimensions {}x{}, obstacles: {}, grass: {}, water: {}",
                 values.get("width"), values.get("height"),
                 values.get("obstacles"), values.get("grass"), values.get("water"));
     }
 
-    private Map<String, Integer> askAnimalAmounts() {
+    private Map<String, Integer> ask() {
+
         Scanner scanner = new Scanner(System.in);
         logger.info("Enter your desired setup values:");
-        int carnivores = -1;
-        Map<String, Integer> values = new HashMap<>(Map.of(
-                "width", -1,
-                "height", -1,
-                "water", -1,
-                "grass", -1,
-                "obstacles", -1
-        ));
-        for (String key : values.keySet()) {
-            while (values.get(key) == -1) {
+
+        Map<String, String> prompts = new LinkedHashMap<>();
+        prompts.put("width", "Map width");
+        prompts.put("height", "Map height");
+        prompts.put("water", "Number of water tiles");
+        prompts.put("grass", "Number of grass tiles");
+        prompts.put("obstacles", "Number of obstacles");
+
+        Map<String, Integer> values = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : prompts.entrySet()) {
+
+            String key = entry.getKey();
+            String label = entry.getValue();
+
+            while (true) {
                 try {
-                    System.out.print(key + ": ");
-                    String input = scanner.nextLine();
+                    System.out.print(label + ": ");
+                    String input = scanner.nextLine().trim();
+
                     int amount = Integer.parseInt(input);
+
                     if (amount < 0) {
-                        logger.warn("Negative number entered. Please enter a non-negative integer.");
-                    } else if (amount >= 100) {
-                        logger.warn(" entered. Please enter a number less than 100 to avoid overpopulation.");
-                    } else {
-                        values.put(key, amount);
+                        logger.warn("Negative number entered for {}. Please enter a non-negative integer.", key);
+                        continue;
                     }
+
+                    if (amount >= 100) {
+                        logger.warn("{} entered for {}. Please enter a number less than 100 to avoid overpopulation.", amount, key);
+                        continue;
+                    }
+
+                    values.put(key, amount);
+                    break;
+
                 } catch (NumberFormatException e) {
-                    logger.warn("Invalid input. Please enter a valid integer.");
+                    logger.warn("Invalid input for {}. Please enter a valid integer.", key);
                 }
             }
         }

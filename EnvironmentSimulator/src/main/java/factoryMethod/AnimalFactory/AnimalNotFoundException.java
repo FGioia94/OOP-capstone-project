@@ -1,18 +1,29 @@
 package factoryMethod.AnimalFactory;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class AnimalNotFoundException extends RuntimeException {
-    private AnimalRepository repository;
+
+    private static final Logger logger = LogManager.getLogger(AnimalNotFoundException.class);
+
 
     public AnimalNotFoundException(String id, AnimalRepository repository) {
-        String message = "Animal with ID '" + id + "' not found. Candidates are:";
-        for (String animalId : repository.listAll()) {
-            message += "\n- " + animalId;
-        }
-        super(message);
+        super(buildMessage(id, repository));
 
-
+        logger.error("AnimalNotFoundException thrown for ID '{}'. Repository contains {} animals.",
+                id, repository.listAll().size());
     }
 
+    private static String buildMessage(String id, AnimalRepository repository) {
+        StringBuilder message = new StringBuilder(
+                "Animal with ID '" + id + "' not found. Candidates are:"
+        );
 
+        for (String animalId : repository.listAll()) {
+            message.append("\n- ").append(animalId);
+        }
+
+        return message.toString();
+    }
 }
-

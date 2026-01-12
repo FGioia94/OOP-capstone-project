@@ -8,8 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Logger logger = LogManager.getLogger(Main.class);
-        logger.info("Game is starting...");
+        System.out.println("Game is starting...");
         Game game;
         boolean adminMode = Game.sendWelcomeMessages();
         if (adminMode) {

@@ -1,33 +1,56 @@
 package template.Game;
 
 import builder.MapBuilder.MapBuilder;
+import builder.MapBuilder.Position;
 import chainOfResponsibility.commandHandler.*;
 import factoryMethod.AnimalFactory.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-
-import builder.MapBuilder.Position;
 
 public class GameLoop {
+
+    private static final Logger logger = LogManager.getLogger(GameLoop.class);
+
     private boolean carryOn;
+    private boolean turnFinished;
+    private int tick;
     private int resourcesRespawnPerCycle = 6;
-    private int tick = 0;
+
+    private final List<GameObserver> observers = new ArrayList<>();
+    private RecapObserver recapObserver;
+
     public final MapBuilder builder;
     public final AnimalRepository animalRepository;
-    private boolean turnFinished;
 
     public GameLoop(MapBuilder builder, AnimalRepository animalRepository) {
         this.carryOn = true;
+        this.turnFinished = false;
+        this.tick = 0;
         this.builder = builder;
         this.animalRepository = animalRepository;
-        this.turnFinished = false;
+    }
 
+    public void addObserver(GameObserver observer) {
+        observers.add(observer);
+        if (observer instanceof RecapObserver ro) {
+            this.recapObserver = ro;
+        }
+    }
+
+    private void notifyObservers(GameEvent event) {
+        for (GameObserver obs : observers) {
+            obs.onEvent(event);
+        }
     }
 
     public final void run() {
-        while (this.carryOn) {
-            if (this.tick == 0) {
+        logger.info("Game loop started.");
+
+        while (carryOn) {
+
+            if (tick == 0) {
                 moveAnimals();
                 attack();
                 checkLifePoints();
@@ -38,103 +61,130 @@ public class GameLoop {
                 assignExp();
                 handleUserInputs();
             } else {
-                String message = "";
-                System.out.println("respawn and move cycle " + this.tick);
-                message += autoRespawnResources();
-                message += moveAnimals();
-                message += attack();
-                message += processHunger();
-                message += checkLifePoints();
-                message += consumeResources();
-                message += reproduce();
-                message += assignExp();
+                autoRespawnResources();
+                moveAnimals();
+                attack();
+                processHunger();
+                checkLifePoints();
+                consumeResources();
+                reproduce();
+                assignExp();
                 handleUserInputs();
             }
-            this.tick++;
 
-
-//            showRecapMessage(message);
-//
-//            rebuildMap(builder, animalRepository);
-
+            printTickRecap();
+            tick++;
         }
 
+        logger.info("Game loop terminated.");
     }
 
-    private String autoRespawnResources() {
+    private void printTickRecap() {
+        String summary = recapObserver != null ? recapObserver.flush() : "";
+
+        System.out.println("=== Tick " + tick + " Summary ===");
+        if (summary.isBlank()) {
+            System.out.println("Nothing significant happened this turn.");
+        } else {
+            System.out.print(summary);
+        }
+        System.out.println("===============================");
+    }
+
+    private void autoRespawnResources() {
         int grass = 0;
         int water = 0;
-        for (int i = 0; i < resourcesRespawnPerCycle; i++) {
-            if ((i % 2 == 0 && this.tick % 2 == 0) || (i % 2 != 0 && this.tick % 2 != 0)) {
-                grass++;
 
+        for (int i = 0; i < resourcesRespawnPerCycle; i++) {
+            if ((i % 2 == 0 && tick % 2 == 0) || (i % 2 != 0 && tick % 2 != 0)) {
+                grass++;
             } else {
                 water++;
             }
         }
+
         builder.setGrassPositions(builder.spawnElements(grass, builder.getGrassPositions()));
         builder.setWaterPositions(builder.spawnElements(water, builder.getWaterPositions()));
-        return "Respawned " + grass + " grass and " + water + " water.\n";
 
+        notifyObservers(new GameEvent(
+                GameEventType.RESOURCE_RESPAWN,
+                String.format("Respawned %d grass and %d water.", grass, water)
+        ));
     }
 
-
-    private String moveAnimals() {
+    private void moveAnimals() {
         Collection<AnimalComponent> animals = animalRepository.getAll();
+
         for (AnimalComponent animal : animals) {
-            if (animal.getPack() != null) {
-                continue;
-            }
+            if (animal.getPack() != null) continue;
             builder.moveAnimal(animal);
+
+            notifyObservers(new GameEvent(
+                    GameEventType.MOVE,
+                    String.format("Animal %s moved to (%d,%d)",
+                            animal.getId(),
+                            animal.getPosition().x(),
+                            animal.getPosition().y())
+            ));
         }
-        return "Moved " + animals.size() + " animals.\n";
     }
 
-    private String attack() {
+    private void attack() {
         Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
         Collection<AnimalComponent> carnivores = animalRepository.getAllByType("Carnivore");
+
         for (AnimalComponent carn : carnivores) {
             for (AnimalComponent target : animals) {
-                boolean isNotSamePack = carn.getPack() != null && target.getPack() != null &&
-                        !carn.getPack().equals(target.getPack());
-                if (isNear(carn.getPosition(), target.getPosition()) && isNotSamePack) {
-                    System.out.println("Carnivore " + carn.getId() +
-                            " found target " + target.getId() +
-                            " at position (" + carn.getPosition().x() +
-                            ", " + carn.getPosition().y() + ")");
+
+                boolean differentPack =
+                        carn.getPack() == null ||
+                                target.getPack() == null ||
+                                !carn.getPack().equals(target.getPack());
+
+                if (isNear(carn.getPosition(), target.getPosition(), 1)
+                        && differentPack
+                        && !carn.getId().equals(target.getId())) {
+
+                    notifyObservers(new GameEvent(
+                            GameEventType.ATTACK,
+                            String.format("Carnivore %s attacked %s at (%d,%d)",
+                                    carn.getId(),
+                                    target.getId(),
+                                    carn.getPosition().x(),
+                                    carn.getPosition().y())
+                    ));
+
                     target.setHp(target.getHp() - (carn.getLevel() * 20));
                     carn.setExp(carn.getExp() + 40);
                     carn.setHp(carn.getHp() + 40);
-                    System.out.println("carnivore " + carn.getId() +
-                            " attacked " + target.getId());
                 }
-
             }
         }
-        return "Carnivores attacked nearby animals.\n";
     }
 
-    private boolean isNear(Position a, Position b) {
+    private boolean isNear(Position a, Position b, int proximity) {
+        proximity = Math.max(1, proximity);
         int dx = Math.abs(a.x() - b.x());
         int dy = Math.abs(a.y() - b.y());
-        return dx <= 1 && dy <= 1; // 8‑direction adjacency
+        return dx <= proximity && dy <= proximity;
     }
 
-    private String processHunger() {
-
+    private void processHunger() {
         Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
+
         for (AnimalComponent animal : animals) {
-            if (animal.getAnimalType().equals("Herbivore")) {
-                animal.setHp(animal.getHp() - 5);
-            } else {
-                animal.setHp(animal.getHp() - 20);
-            }
+            int loss = animal.getAnimalType().equals("Herbivore") ? 5 : 20;
+            animal.setHp(animal.getHp() - loss);
+
+            notifyObservers(new GameEvent(
+                    GameEventType.HUNGER,
+                    String.format("Animal %s lost %d HP due to hunger.",
+                            animal.getId(), loss)
+            ));
         }
-        return "Animals are getting hungry.\n";
     }
 
-
-    private String checkLifePoints() {
+    private void checkLifePoints() {
         Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
         List<String> toRemove = new ArrayList<>();
 
@@ -146,97 +196,143 @@ public class GameLoop {
 
         for (String id : toRemove) {
             animalRepository.remove(id);
-        }
 
-        return "Some animals didn't pass the night.\n";
+            notifyObservers(new GameEvent(
+                    GameEventType.DEATH,
+                    String.format("Animal %s died.", id)
+            ));
+        }
     }
 
+    private boolean consumeNearbyResource(List<Position> resourceList, Position animalPos) {
+        Iterator<Position> it = resourceList.iterator();
 
-    private String consumeResources() {
+        while (it.hasNext()) {
+            Position pos = it.next();
+
+            if (isNear(animalPos, pos, 3)) {
+                it.remove();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void consumeResources() {
         Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
         List<Position> grassPositions = builder.getGrassPositions();
         List<Position> waterPositions = builder.getWaterPositions();
 
         for (AnimalComponent animal : animals) {
-            if (Objects.equals(animal.getAnimalType(), "Herbivore")) {
-                for (Position grassPos : grassPositions) {
-                    if (animal.getPosition() == grassPos) {
-                        grassPositions.remove(grassPos);
-                        builder.setGrassPositions(grassPositions);
-                        animal.setHp(animal.getHp() + 10 * animal.getLevel());
-                        animal.setExp(animal.getExp() + 20);
 
-                    }
-                }
+            boolean ateGrass = false;
+            boolean drankWater = false;
 
+            if (animal.getAnimalType().equals("Herbivore")) {
+                ateGrass = consumeNearbyResource(grassPositions, animal.getPosition());
             }
 
-            for (Position waterPos : waterPositions) {
-                if (animal.getPosition() == waterPos) {
-                    waterPositions.remove(waterPos);
-                    builder.setWaterPositions(waterPositions);
-                    animal.setHp(animal.getHp() + 10);
+            drankWater = consumeNearbyResource(waterPositions, animal.getPosition());
 
-                }
+            if (ateGrass) {
+                animal.setHp(animal.getHp() + 10 * animal.getLevel());
+                animal.setExp(animal.getExp() + 20);
+
+                notifyObservers(new GameEvent(
+                        GameEventType.RESOURCE_CONSUMPTION,
+                        String.format("Herbivore %s ate grass.", animal.getId())
+                ));
+            }
+
+            if (drankWater) {
+                animal.setHp(animal.getHp() + 10);
+
+                notifyObservers(new GameEvent(
+                        GameEventType.RESOURCE_CONSUMPTION,
+                        String.format("Animal %s drank water.", animal.getId())
+                ));
             }
         }
-        return "Animals consumed available resources.\n";
+
+        builder.setGrassPositions(grassPositions);
+        builder.setWaterPositions(waterPositions);
     }
 
-    private String reproduce() {
-        AnimalFactory factory;
-        boolean message = false;
-        for (AnimalComponent animal : animalRepository.getAllExceptPacks()) {
-            for (AnimalComponent partner : animalRepository.getAllByType(animal.getAnimalType())) {
-                if (!Objects.equals(animal.getSex(), partner.getSex()) && animal.getPosition() == partner.getPosition()) {
+    private void reproduce() {
+        Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
+        Set<String> processedPairs = new HashSet<>();
 
-                    factory = Objects.equals(animal.getAnimalType(), "Carnivore") ? new CarnivoreFactory() : new HerbivoreFactory();
+        for (AnimalComponent a : animals) {
+            for (AnimalComponent b : animals) {
 
+                if (a.getId().equals(b.getId())) continue;
+                if (!a.getAnimalType().equals(b.getAnimalType())) continue;
+                if (a.getSex().equals(b.getSex())) continue;
+                if (!isNear(a.getPosition(), b.getPosition(), 3)) continue;
+
+                String pairKey = a.getId() + "-" + b.getId();
+                String reverseKey = b.getId() + "-" + a.getId();
+
+                if (processedPairs.contains(pairKey) || processedPairs.contains(reverseKey)) {
+                    continue;
+                }
+
+                processedPairs.add(pairKey);
+
+                AnimalFactory factory =
+                        a.getAnimalType().equals("Carnivore")
+                                ? new CarnivoreFactory()
+                                : new HerbivoreFactory();
+
+                int children = (int) (Math.random() * 5) + 1;
+
+                notifyObservers(new GameEvent(
+                        GameEventType.REPRODUCTION,
+                        String.format("%s and %s reproduced and created %d children.",
+                                a.getId(), b.getId(), children)
+                ));
+
+                for (int i = 0; i < children; i++) {
                     Animal child = factory.buildAnimal(
                             builder,
                             animalRepository,
-                            animal.getPosition(),
-                            Math.random() < 0.5 ? "m" : "f", 0, 100, 1);
-
+                            a.getPosition(),
+                            Math.random() < 0.5 ? "m" : "f",
+                            0,
+                            100,
+                            1
+                    );
                     animalRepository.add(child);
-
-                    animal.setExp(animal.getExp() + 50);
-                    partner.setExp(animal.getExp() + 50);
-                    message = true;
                 }
+
+                a.setExp(a.getExp() + 50);
+                b.setExp(b.getExp() + 50);
             }
-        }
-        if (message) {
-            return "Some animals reproduced.\n";
-        } else {
-            return "";
         }
     }
 
-    private String assignExp() {
+    private void assignExp() {
         for (AnimalComponent animal : animalRepository.getAllExceptPacks()) {
-            if (animal.getExp() >= 100) {
+
+            while (animal.getExp() >= 100) {
                 animal.setLevel(animal.getLevel() + 1);
                 animal.setExp(animal.getExp() - 100);
                 animal.setHp(animal.getHp() + 20);
+
+                notifyObservers(new GameEvent(
+                        GameEventType.LEVEL_UP,
+                        String.format("Animal %s leveled up to %d.",
+                                animal.getId(), animal.getLevel())
+                ));
             }
         }
-        return "Assigned experience points to animals.\n";
     }
-
-//    private void askUser() {
-//        System.out.println("User turn started.");
-//        boolean turnActive = true;
-//        while (turnActive) {
-//            System.out.println("What do you want to do next? Type 'help' or 'h' for a list of commands.");
-//            turnActive = handleUserInputs();
-//        }
-//        System.out.println("User turn finished.");
-//    }
 
     private void handleUserInputs() {
 
         Scanner scanner = new Scanner(System.in);
+
         CommandHandler chain = new CommandChainBuilder()
                 .add(new HelpCommandHandler())
                 .add(new ExitCommandHandler())
@@ -254,21 +350,28 @@ public class GameLoop {
                 .add(new CreateCommandHandler())
                 .add(new InvalidInputCommandHandler())
                 .build();
-
-        while (!this.turnFinished) {
-            System.out.println("What do you want to do next? Type 'help' or 'h' for a list of commands.");
-            String input = scanner.nextLine().trim();
-            chain.handleAndMessage(input, scanner, this);
+        try {
+            while (!turnFinished) {
+                System.out.println("Awaiting command (type 'help' or 'h' for list)");
+                String input = scanner.nextLine().trim();
+                chain.handleAndMessage(input, scanner, this);
+            }
+        } catch (NoSuchElementException e) {
+            // IntelliJ or the terminal closed the input stream
+            System.out.println("Input stream closed. Exiting game...");
+            requestExit();
         }
-        this.turnFinished = false;
+
+        turnFinished = false;
     }
 
     public void setTurnFinished(boolean finished) {
         this.turnFinished = finished;
     }
 
-    public static void requestExit() {
-        System.exit(0);
+    public void requestExit() {
+        this.carryOn = false;
+        this.turnFinished = true;
 
     }
 }

@@ -1,22 +1,38 @@
 package strategy.IO;
 
 import memento.GameSnapshot.GameSnapshot;
-
-import java.io.IOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BinarySaveStrategy implements SaveStrategy {
+
+    private static final Logger logger = LogManager.getLogger(BinarySaveStrategy.class);
+
     @Override
-    public void save(GameSnapshot snapshot, String filePath) throws IOException {
+    public void save(GameSnapshot snapshot, String filePath) {
+
+        logger.info("Saving GameSnapshot to '{}'", filePath);
+
         BinarySerializationStrategy serializationStrategy = new BinarySerializationStrategy();
         BinaryPersistenceStrategy persistenceStrategy = new BinaryPersistenceStrategy(filePath);
 
         try {
             byte[] serializedData = serializationStrategy.serialize(snapshot);
+
+            logger.debug("Snapshot serialized into {} bytes", serializedData.length);
+
             persistenceStrategy.save(serializedData);
-        } catch (IOException e) {
-            throw new IOException(e);
+
+            logger.info("GameSnapshot successfully saved to '{}'", filePath);
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
+
+            logger.error("Failed to save GameSnapshot to '{}': {}", filePath, e.getMessage(), e);
+
+            throw new SaveException(
+                    "Unable to save GameSnapshot to file: " + filePath,
+                    e
+            );
         }
     }
 }

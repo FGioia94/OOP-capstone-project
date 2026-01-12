@@ -1,15 +1,15 @@
 package factoryMethod.AnimalFactory;
 
-import builder.MapBuilder.MapBuilder;
-import builder.MapBuilder.Position;
-
-import java.util.List;
-import java.util.UUID;
-
 import builder.MapBuilder.Position;
 import memento.GameSnapshot.AnimalState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.UUID;
 
 public class CarnivoreFactory extends AnimalFactory {
+
+    private static final Logger logger = LogManager.getLogger(CarnivoreFactory.class);
 
     @Override
     public Animal createAnimal(
@@ -22,15 +22,22 @@ public class CarnivoreFactory extends AnimalFactory {
 
         String id = UUID.randomUUID().toString();
 
+        logger.debug("Creating Carnivore with ID={}, Pos={}, Sex={}, HP={}, EXP={}, LVL={}",
+                id, position, sex, hp, exp, level);
+
         Animal carnivore = new Carnivore(
                 id,
                 position,
                 sex,
                 hp,
                 exp,
-                level);
-        repository.add(carnivore);
-        return carnivore;
+                level
+        );
 
+        repository.add(carnivore);
+
+        logger.info("Carnivore created and added to repository: ID={}", id);
+
+        return carnivore;
     }
 }
