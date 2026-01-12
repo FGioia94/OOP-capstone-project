@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GameLoop {
 
@@ -116,15 +117,15 @@ public class GameLoop {
 
         notifyObservers(new GameEvent(
                 GameEventType.RESOURCE_RESPAWN,
-                String.format("Respawned %d grass and %d water.", grass, water)
-        ));
+                String.format("Respawned %d grass and %d water.", grass, water)));
     }
 
     private void moveAnimals() {
         Collection<AnimalComponent> animals = animalRepository.getAll();
 
         for (AnimalComponent animal : animals) {
-            if (animal.getPack() != null) continue;
+            if (animal.getPack() != null)
+                continue;
             builder.moveAnimal(animal);
 
             notifyObservers(new GameEvent(
@@ -132,8 +133,7 @@ public class GameLoop {
                     String.format("Animal %s moved to (%d,%d)",
                             animal.getId(),
                             animal.getPosition().x(),
-                            animal.getPosition().y())
-            ));
+                            animal.getPosition().y())));
         }
     }
 
@@ -144,10 +144,9 @@ public class GameLoop {
         for (AnimalComponent carn : carnivores) {
             for (AnimalComponent target : animals) {
 
-                boolean differentPack =
-                        carn.getPack() == null ||
-                                target.getPack() == null ||
-                                !carn.getPack().equals(target.getPack());
+                boolean differentPack = carn.getPack() == null ||
+                        target.getPack() == null ||
+                        !carn.getPack().equals(target.getPack());
 
                 if (isNear(carn.getPosition(), target.getPosition(), 1)
                         && differentPack
@@ -159,8 +158,7 @@ public class GameLoop {
                                     carn.getId(),
                                     target.getId(),
                                     carn.getPosition().x(),
-                                    carn.getPosition().y())
-                    ));
+                                    carn.getPosition().y())));
 
                     target.setHp(target.getHp() - (carn.getLevel() * 20));
                     carn.setExp(carn.getExp() + 40);
@@ -180,35 +178,46 @@ public class GameLoop {
     private void processHunger() {
         Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
 
-        for (AnimalComponent animal : animals) {
+        // Thread-safe queue for events generated in parallel
+        Queue<GameEvent> eventQueue = new ConcurrentLinkedQueue<>();
+
+        // Parallelize only the HP update + event creation
+        animals.parallelStream().forEach(animal -> {
             int loss = animal.getAnimalType().equals("Herbivore") ? 5 : 20;
             animal.setHp(animal.getHp() - loss);
 
-            notifyObservers(new GameEvent(
+            eventQueue.add(new GameEvent(
                     GameEventType.HUNGER,
-                    String.format("Animal %s lost %d HP due to hunger.",
-                            animal.getId(), loss)
-            ));
+                    String.format("Animal %s lost %d HP due to hunger.", animal.getId(), loss)));
+        });
+
+        // Notify observers on a single thread to avoid race conditions
+        GameEvent event;
+        while ((event = eventQueue.poll()) != null) {
+            notifyObservers(event);
         }
     }
 
     private void checkLifePoints() {
         Collection<AnimalComponent> animals = animalRepository.getAllExceptPacks();
-        List<String> toRemove = new ArrayList<>();
 
-        for (AnimalComponent animal : animals) {
+        // Thread-safe list for IDs to remove
+        List<String> toRemove = Collections.synchronizedList(new ArrayList<>());
+
+        // Parallelize only the HP check
+        animals.parallelStream().forEach(animal -> {
             if (animal.getHp() <= 0) {
                 toRemove.add(animal.getId());
             }
-        }
+        });
 
+        // Process removals and notifications sequentially
         for (String id : toRemove) {
             animalRepository.remove(id);
 
             notifyObservers(new GameEvent(
                     GameEventType.DEATH,
-                    String.format("Animal %s died.", id)
-            ));
+                    String.format("Animal %s died.", id)));
         }
     }
 
@@ -249,8 +258,7 @@ public class GameLoop {
 
                 notifyObservers(new GameEvent(
                         GameEventType.RESOURCE_CONSUMPTION,
-                        String.format("Herbivore %s ate grass.", animal.getId())
-                ));
+                        String.format("Herbivore %s ate grass.", animal.getId())));
             }
 
             if (drankWater) {
@@ -258,8 +266,7 @@ public class GameLoop {
 
                 notifyObservers(new GameEvent(
                         GameEventType.RESOURCE_CONSUMPTION,
-                        String.format("Animal %s drank water.", animal.getId())
-                ));
+                        String.format("Animal %s drank water.", animal.getId())));
             }
         }
 
@@ -274,10 +281,14 @@ public class GameLoop {
         for (AnimalComponent a : animals) {
             for (AnimalComponent b : animals) {
 
-                if (a.getId().equals(b.getId())) continue;
-                if (!a.getAnimalType().equals(b.getAnimalType())) continue;
-                if (a.getSex().equals(b.getSex())) continue;
-                if (!isNear(a.getPosition(), b.getPosition(), 3)) continue;
+                if (a.getId().equals(b.getId()))
+                    continue;
+                if (!a.getAnimalType().equals(b.getAnimalType()))
+                    continue;
+                if (a.getSex().equals(b.getSex()))
+                    continue;
+                if (!isNear(a.getPosition(), b.getPosition(), 3))
+                    continue;
 
                 String pairKey = a.getId() + "-" + b.getId();
                 String reverseKey = b.getId() + "-" + a.getId();
@@ -288,18 +299,16 @@ public class GameLoop {
 
                 processedPairs.add(pairKey);
 
-                AnimalFactory factory =
-                        a.getAnimalType().equals("Carnivore")
-                                ? new CarnivoreFactory()
-                                : new HerbivoreFactory();
+                AnimalFactory factory = a.getAnimalType().equals("Carnivore")
+                        ? new CarnivoreFactory()
+                        : new HerbivoreFactory();
 
                 int children = (int) (Math.random() * 5) + 1;
 
                 notifyObservers(new GameEvent(
                         GameEventType.REPRODUCTION,
                         String.format("%s and %s reproduced and created %d children.",
-                                a.getId(), b.getId(), children)
-                ));
+                                a.getId(), b.getId(), children)));
 
                 for (int i = 0; i < children; i++) {
                     Animal child = factory.buildAnimal(
@@ -309,8 +318,7 @@ public class GameLoop {
                             Math.random() < 0.5 ? "m" : "f",
                             0,
                             100,
-                            1
-                    );
+                            1);
                     animalRepository.add(child);
                 }
 
@@ -321,20 +329,27 @@ public class GameLoop {
     }
 
     private void assignExp() {
-        for (AnimalComponent animal : animalRepository.getAllExceptPacks()) {
+
+        Queue<GameEvent> eventQueue = new ConcurrentLinkedQueue<>();
+        animalRepository.getAllExceptPacks().parallelStream().forEach(animal -> {
 
             while (animal.getExp() >= 100) {
                 animal.setLevel(animal.getLevel() + 1);
                 animal.setExp(animal.getExp() - 100);
                 animal.setHp(animal.getHp() + 20);
 
-                notifyObservers(new GameEvent(
+                eventQueue.add(new GameEvent(
                         GameEventType.LEVEL_UP,
                         String.format("Animal %s leveled up to %d.",
-                                animal.getId(), animal.getLevel())
-                ));
+                                animal.getId(), animal.getLevel())));
             }
+        });
+
+        GameEvent event;
+        while ((event = eventQueue.poll()) != null) {
+            notifyObservers(event);
         }
+
     }
 
     private void handleUserInputs() {
@@ -376,7 +391,8 @@ public class GameLoop {
                 try {
                     chain.handleAndMessage(input, scanner, this);
                 } catch (Exception e) {
-                    // Exception shielding: catch any unhandled exceptions to prevent stack trace exposure
+                    // Exception shielding: catch any unhandled exceptions to prevent stack trace
+                    // exposure
                     logger.error("Unexpected error handling command '{}': {}", input, e.getMessage(), e);
                     System.out.println("An error occurred: " + e.getMessage());
                     System.out.println("The game will continue. Type 'help' for available commands.");
