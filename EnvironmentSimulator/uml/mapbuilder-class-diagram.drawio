@@ -1,0 +1,159 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="MapBuilder Package - Class Diagram" id="mapbuilder-class-diagram">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- MapBuilder Class -->
+        <mxCell id="mapbuilder-class" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;MapBuilder&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- width: int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- height: int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- waterPositions: List&amp;lt;Position&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- grassPositions: List&amp;lt;Position&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- obstaclesPositions: List&amp;lt;Position&amp;gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ setWidth(int): MapBuilder&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ setHeight(int): MapBuilder&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ setWaterPositions(List): MapBuilder&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ setGrassPositions(List): MapBuilder&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ setObstaclesPositions(List): MapBuilder&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ build(): EnvironmentMap&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- validate(): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ getAllValidPositions(): List&amp;lt;Position&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ spawnElements(int, List): List&amp;lt;Position&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ getRandomValidPosition(): Position&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ moveAnimal(AnimalComponent): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ toState(): MapState&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ fromState(MapState): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ clear(): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ clearAll(): void&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=11;fontFamily=Helvetica;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="320" height="380" as="geometry"/>
+        </mxCell>
+
+        <!-- EnvironmentMap Class -->
+        <mxCell id="environmentmap-class" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;EnvironmentMap&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- height: int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- width: int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ waterPositions: List&amp;lt;Position&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ grassPositions: List&amp;lt;Position&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ obstaclesPositions: List&amp;lt;Position&amp;gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ EnvironmentMap(MapBuilder)&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=11;fontFamily=Helvetica;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="460" y="80" width="280" height="140" as="geometry"/>
+        </mxCell>
+
+        <!-- Position Class -->
+        <mxCell id="position-class" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;record&amp;gt;&amp;gt;&lt;/i&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Position&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ x: int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ y: int&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ x(): int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ y(): int&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=11;fontFamily=Helvetica;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="480" y="280" width="240" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- MapIterator Class -->
+        <mxCell id="mapiterator-class" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;MapIterator&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;implements Iterator&amp;lt;Position&amp;gt;&lt;/i&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- width: int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- height: int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- occupant: Set&amp;lt;String&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- row: int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- col: int&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ MapIterator(int, int, List&amp;lt;Position&amp;gt;)&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ hasNext(): boolean&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ next(): Position&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- moveToNextValid(): void&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=11;fontFamily=Helvetica;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="60" y="480" width="280" height="180" as="geometry"/>
+        </mxCell>
+
+        <!-- InvalidMapConfigurationException Class -->
+        <mxCell id="exception-class" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;InvalidMapConfigurationException&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;extends Exception&lt;/i&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ InvalidMapConfigurationException(&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:16px;&quot;&gt;boolean, int, boolean, int,&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:16px;&quot;&gt;boolean, boolean, boolean)&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- buildMessage(...): String&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=11;fontFamily=Helvetica;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="440" y="480" width="280" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- Iterator Interface -->
+        <mxCell id="iterator-interface" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Iterator&amp;lt;T&amp;gt;&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ hasNext(): boolean&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ next(): T&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=11;fontFamily=Helvetica;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="80" y="720" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Serializable Interface -->
+        <mxCell id="serializable-interface" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Serializable&lt;/b&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=11;fontFamily=Helvetica;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="500" y="720" width="200" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Relationships -->
+        
+        <!-- MapBuilder creates EnvironmentMap -->
+        <mxCell id="edge-1" value="«creates»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="mapbuilder-class" target="environmentmap-class">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- MapBuilder uses Position -->
+        <mxCell id="edge-2" value="uses" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="mapbuilder-class" target="position-class">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- MapBuilder uses MapIterator -->
+        <mxCell id="edge-3" value="uses" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="mapbuilder-class" target="mapiterator-class">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="450"/>
+              <mxPoint x="200" y="550"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- MapBuilder throws InvalidMapConfigurationException -->
+        <mxCell id="edge-4" value="«throws»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="mapbuilder-class" target="exception-class">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="240"/>
+              <mxPoint x="380" y="540"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- EnvironmentMap uses Position -->
+        <mxCell id="edge-5" value="contains" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamond;endFill=0;endSize=12;" edge="1" parent="1" source="environmentmap-class" target="position-class">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- EnvironmentMap constructed by MapBuilder -->
+        <mxCell id="edge-6" value="constructed by" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="environmentmap-class" target="mapbuilder-class">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- MapIterator implements Iterator -->
+        <mxCell id="edge-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="mapiterator-class" target="iterator-interface">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- MapIterator returns Position -->
+        <mxCell id="edge-8" value="returns" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="mapiterator-class" target="position-class">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="570"/>
+              <mxPoint x="420" y="570"/>
+              <mxPoint x="420" y="340"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Position implements Serializable -->
+        <mxCell id="edge-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="position-class" target="serializable-interface">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- MapBuilder implements Serializable -->
+        <mxCell id="edge-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="mapbuilder-class" target="serializable-interface">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="450"/>
+              <mxPoint x="200" y="820"/>
+              <mxPoint x="520" y="820"/>
+              <mxPoint x="520" y="745"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-box" value="&lt;b&gt;Legend&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="820" y="40" width="320" height="220" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend-1" value="Builder Pattern: Core builder class" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;" vertex="1" parent="1">
+          <mxGeometry x="830" y="70" width="300" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend-2" value="Product: Built by MapBuilder" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" vertex="1" parent="1">
+          <mxGeometry x="830" y="100" width="300" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend-3" value="Value Object: Java record (immutable)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;" vertex="1" parent="1">
+          <mxGeometry x="830" y="130" width="300" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend-4" value="Iterator Pattern: Traverses valid positions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;" vertex="1" parent="1">
+          <mxGeometry x="830" y="160" width="300" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend-5" value="Exception: Domain-specific validation error" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;" vertex="1" parent="1">
+          <mxGeometry x="830" y="190" width="300" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend-6" value="Interface: Java standard library" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;" vertex="1" parent="1">
+          <mxGeometry x="830" y="220" width="300" height="25" as="geometry"/>
+        </mxCell>
+
+        <!-- Notes -->
+        <mxCell id="note-1" value="&lt;b&gt;Design Patterns&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. &lt;b&gt;Builder Pattern:&lt;/b&gt; MapBuilder uses fluent API (method chaining) to construct complex EnvironmentMap objects step-by-step with validation.&lt;br&gt;&lt;br&gt;2. &lt;b&gt;Iterator Pattern:&lt;/b&gt; MapIterator provides sequential access to valid (unoccupied) positions on the map without exposing internal structure." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="820" y="290" width="320" height="180" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="note-2" value="&lt;b&gt;Key Responsibilities&lt;/b&gt;&lt;br&gt;&lt;br&gt;• &lt;b&gt;MapBuilder:&lt;/b&gt; Constructs and validates environment maps, manages spawning/movement logic&lt;br&gt;&lt;br&gt;• &lt;b&gt;EnvironmentMap:&lt;/b&gt; Immutable product representing configured game world&lt;br&gt;&lt;br&gt;• &lt;b&gt;Position:&lt;/b&gt; Immutable coordinate pair (Java record)&lt;br&gt;&lt;br&gt;• &lt;b&gt;MapIterator:&lt;/b&gt; Iterates only over unoccupied positions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="820" y="500" width="320" height="200" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
