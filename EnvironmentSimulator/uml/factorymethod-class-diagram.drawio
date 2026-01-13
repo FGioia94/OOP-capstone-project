@@ -1,125 +1,149 @@
-<mxfile host="app.diagrams.net">
-  <diagram name="FactoryMethod Package" id="factorymethod-diagram">
-    <mxGraphModel dx="1220" dy="820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-01-13T00:00:00.000Z" agent="5.0 (Windows)" etag="" version="20.3.2" type="device">
+  <diagram id="factorymethod-diagram" name="factoryMethod.AnimalFactory">
+    <mxGraphModel dx="1186" dy="740" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
 
-        <!-- AnimalComponent (Interface) -->
-        <mxCell id="animalcomponent" value="AnimalComponent &lt;&lt;interface&gt;&gt;" style="rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="40" y="40" width="320" height="220" as="geometry" />
-        </mxCell>
-        <mxCell id="animalcomponent-members" value="+ getPosition(): Position\n+ setPosition(Position): void\n+ getHp(): int\n+ setHp(int): void\n+ getExp(): int\n+ setExp(int): void\n+ getLevel(): int\n+ setLevel(int): void\n+ getAnimalType(): String\n+ getSex(): String\n+ getId(): String\n+ getRange(): int\n+ getPack(): String\n+ setPack(String): void\n+ getMembers(): List&lt;AnimalComponent&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;" vertex="1" parent="animalcomponent">
-          <mxGeometry y="28" width="320" height="180" as="geometry" />
+        <!-- Interface: AnimalComponent -->
+        <mxCell id="ac" value="&lt;b&gt;AnimalComponent&lt;/b&gt;&lt;br/&gt;&lt;i&gt;interface&lt;/i&gt;&lt;br/&gt;&lt;br/&gt;+ getId() : String&lt;br/&gt;+ getAnimalType() : String&lt;br/&gt;+ getSex() : String&lt;br/&gt;+ getPosition() : Position&lt;br/&gt;+ setPosition(p : Position) : void&lt;br/&gt;+ getHp()/setHp(int)&lt;br/&gt;+ getExp()/setExp(int)&lt;br/&gt;+ getLevel()/setLevel(int)&lt;br/&gt;+ getRange() : int&lt;br/&gt;+ getPack()/setPack(String)&lt;br/&gt;+ getMembers() : List&lt;AnimalComponent&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#F8F8FF;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="320" height="260" as="geometry" />
         </mxCell>
 
-        <!-- Animal (Abstract) -->
-        <mxCell id="animal" value="&lt;&lt;abstract&gt;&gt; Animal" style="rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;align=center;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="420" y="40" width="360" height="260" as="geometry" />
-        </mxCell>
-        <mxCell id="animal-fields" value="- logger: Logger\n- exp: int\n- range: int\n- level: int\n- id: String\n- sex: String\n- position: Position\n- hp: int\n- animalType: String\n- pack: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;" vertex="1" parent="animal">
-          <mxGeometry y="28" width="360" height="120" as="geometry" />
-        </mxCell>
-        <mxCell id="animal-methods" value="+ getId(): String\n+ getRange(): int\n+ getSex(): String\n+ getPosition(): Position\n+ setPosition(Position): void\n+ getHp(): int\n+ setHp(int): void\n+ getLevel(): int\n+ setLevel(int): void\n+ getExp(): int\n+ setExp(int): void\n+ getAnimalType(): String\n+ getPack(): String\n+ setPack(String): void\n+ getMembers(): List&lt;AnimalComponent&gt;\n# reproduce(): Animal (abstract)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;" vertex="1" parent="animal">
-          <mxGeometry y="148" width="360" height="112" as="geometry" />
+        <!-- Abstract class: Animal -->
+        <mxCell id="animal" value="&lt;b&gt;Animal&lt;/b&gt;&lt;br/&gt;&lt;i&gt;abstract&lt;/i&gt;&lt;br/&gt;&lt;br/&gt;- id : String&lt;br/&gt;- animalType : String&lt;br/&gt;- range : int&lt;br/&gt;- sex : String&lt;br/&gt;- position : Position&lt;br/&gt;- hp : int&lt;br/&gt;- exp : int&lt;br/&gt;- level : int&lt;br/&gt;- pack : String&lt;br/&gt;&lt;br/&gt;+ get*/set* (hp, exp, level, position, pack)&lt;br/&gt;+ getId(), getRange(), getSex(), getAnimalType()&lt;br/&gt;+ getMembers() : List&lt;AnimalComponent&gt;&lt;br/&gt;# reproduce() : Animal" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#F8F8F8;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="420" y="40" width="360" height="320" as="geometry" />
         </mxCell>
 
-        <!-- Carnivore / Herbivore -->
-        <mxCell id="carnivore" value="Carnivore" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="420" y="320" width="260" height="86" as="geometry" />
-        </mxCell>
-        <mxCell id="herbivore" value="Herbivore" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="700" y="320" width="260" height="86" as="geometry" />
+        <!-- Carnivore -->
+        <mxCell id="carnivore" value="&lt;b&gt;Carnivore&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;+ Carnivore(id, pos, sex, hp, exp, level)&lt;br/&gt;+ reproduce() : Animal (stub)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#FFFFFF;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="820" y="40" width="240" height="120" as="geometry" />
         </mxCell>
 
-        <!-- AnimalFactory (Abstract) -->
-        <mxCell id="animalfactory" value="&lt;&lt;abstract&gt;&gt; AnimalFactory" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="40" y="300" width="360" height="220" as="geometry" />
-        </mxCell>
-        <mxCell id="animalfactory-methods" value="+ buildAnimal(builder: MapBuilder, repository: AnimalRepository, position: Position, sex: String, hp: int, exp: int, level: int): Animal\n# createAnimal(repository: AnimalRepository, position: Position, sex: String, hp: int, exp: int, level: int): Animal (abstract)\n+ createAnimalFromState(repository: AnimalRepository, state: AnimalState): Animal\n+ validateCreation(...): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;" vertex="1" parent="animalfactory">
-          <mxGeometry y="28" width="360" height="180" as="geometry" />
-        </mxCell>
-
-        <!-- CarnivoreFactory / HerbivoreFactory -->
-        <mxCell id="carnivorefactory" value="CarnivoreFactory" style="rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="440" y="420" width="260" height="86" as="geometry" />
-        </mxCell>
-        <mxCell id="herbivorefactory" value="HerbivoreFactory" style="rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="720" y="420" width="260" height="86" as="geometry" />
-        </mxCell>
-
-        <!-- AnimalRepository -->
-        <mxCell id="repository" value="AnimalRepository" style="rounded=1;fillColor=#f8cecc;strokeColor=#b85450;align=center;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="420" y="520" width="540" height="300" as="geometry" />
-        </mxCell>
-        <mxCell id="repository-fields" value="- logger: Logger\n- animals: Map&lt;String, AnimalComponent&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;" vertex="1" parent="repository">
-          <mxGeometry y="28" width="540" height="64" as="geometry" />
-        </mxCell>
-        <mxCell id="repository-methods" value="+ add(AnimalComponent): void\n+ clear(): void\n+ get(String): AnimalComponent\n+ getAll(): Collection&lt;AnimalComponent&gt;\n+ remove(String): void\n+ getAllByType(String): Collection&lt;AnimalComponent&gt;\n+ toState(): AnimalRepositoryState\n+ fromState(state: AnimalRepositoryState): void\n+ listAll(): List&lt;String&gt;\n+ getAllExceptPacks(): List&lt;AnimalComponent&gt;\n+ getAnimalById(String): AnimalComponent" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;" vertex="1" parent="repository">
-          <mxGeometry y="96" width="540" height="192" as="geometry" />
+        <!-- Herbivore -->
+        <mxCell id="herbivore" value="&lt;b&gt;Herbivore&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;+ Herbivore(id, pos, sex, hp, exp, level)&lt;br/&gt;+ reproduce() : Animal (stub)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#FFFFFF;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="820" y="180" width="240" height="120" as="geometry" />
         </mxCell>
 
         <!-- AnimalPack -->
-        <mxCell id="pack" value="AnimalPack implements AnimalComponent" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="40" y="540" width="340" height="260" as="geometry" />
-        </mxCell>
-        <mxCell id="pack-fields" value="- logger: Logger\n- id: String\n- members: List&lt;AnimalComponent&gt;\n- animalType: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;" vertex="1" parent="pack">
-          <mxGeometry y="28" width="340" height="84" as="geometry" />
-        </mxCell>
-        <mxCell id="pack-methods" value="+ add(AnimalComponent): void\n+ remove(AnimalComponent): void\n+ getMembers(): List&lt;AnimalComponent&gt;\n+ getPosition(): Position\n+ setPosition(Position): void\n+ getHp(): int\n+ setHp(int): void\n+ getExp(): int\n+ setExp(int): void\n+ getLevel(): int\n+ setLevel(int): void\n+ getAnimalType(): String\n+ getSex(): String\n+ getId(): String\n+ getRange(): int\n+ getPack(): String\n+ setPack(String): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;" vertex="1" parent="pack">
-          <mxGeometry y="120" width="340" height="120" as="geometry" />
+        <mxCell id="pack" value="&lt;b&gt;AnimalPack&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;- id : String&lt;br/&gt;- members : List&lt;AnimalComponent&gt;&lt;br/&gt;- animalType : String&lt;br/&gt;&lt;br/&gt;+ add(c : AnimalComponent) : void&lt;br/&gt;+ remove(c : AnimalComponent) : void&lt;br/&gt;+ getMembers() : List&lt;AnimalComponent&gt;&lt;br/&gt;+ getPosition()/setPosition(Position)&lt;br/&gt;+ getHp()/getExp()/getLevel()/getRange()&lt;br/&gt;+ getId(), getAnimalType()" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#F0FFF0;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="340" width="360" height="260" as="geometry" />
         </mxCell>
 
-        <!-- AnimalInspector (Utility) -->
-        <mxCell id="inspector" value="AnimalInspector (utility)" style="rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=center;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="880" y="40" width="320" height="200" as="geometry" />
+        <!-- AnimalFactory (abstract) -->
+        <mxCell id="factory" value="&lt;b&gt;AnimalFactory&lt;/b&gt;&lt;br/&gt;&lt;i&gt;abstract&lt;/i&gt;&lt;br/&gt;&lt;br/&gt;+ buildAnimal(builder, repo, pos, sex, hp, exp, level) : Animal&lt;br/&gt;# createAnimal(repo, pos, sex, hp, exp, level) : Animal&lt;br/&gt;+ createAnimalFromState(repo, state) : Animal&lt;br/&gt;+ validateCreation(builder, pos, sex, hp, exp, level) : void" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#FFF8F0;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="460" y="400" width="380" height="220" as="geometry" />
         </mxCell>
-        <mxCell id="inspector-methods" value="+ inspectAnimal(AnimalComponent): Map&lt;String,Object&gt;\n+ invokeGetter(AnimalComponent, String): Object\n+ loadFactoryByName(String): AnimalFactory\n+ discoverFactories(): List&lt;String&gt;\n+ compareAnimals(a,b): Map&lt;String,String&gt;\n+ printInspectionReport(AnimalComponent): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;" vertex="1" parent="inspector">
-          <mxGeometry y="28" width="320" height="172" as="geometry" />
+
+        <!-- CarnivoreFactory -->
+        <mxCell id="carFactory" value="&lt;b&gt;CarnivoreFactory&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;+ createAnimal(repo, pos, sex, hp, exp, level) : Animal" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#FFFFFF;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="880" y="400" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- HerbivoreFactory -->
+        <mxCell id="herFactory" value="&lt;b&gt;HerbivoreFactory&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;+ createAnimal(repo, pos, sex, hp, exp, level) : Animal" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#FFFFFF;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="880" y="520" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- AnimalRepository -->
+        <mxCell id="repo" value="&lt;b&gt;AnimalRepository&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;- animals : Map&lt;String, AnimalComponent&gt;&lt;br/&gt;&lt;br/&gt;+ add(a : AnimalComponent) : void&lt;br/&gt;+ clear() : void&lt;br/&gt;+ get(id) : AnimalComponent&lt;br/&gt;+ getAll()/getAllByType(type)/getAllExceptPacks() : Collection&lt;br/&gt;+ remove(id) : void&lt;br/&gt;+ toState() : AnimalRepositoryState&lt;br/&gt;+ fromState(state) : void&lt;br/&gt;+ listAll() : List&lt;String&gt;&lt;br/&gt;+ getAnimalById(id) : AnimalComponent" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#F8F8F8;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="520" y="650" width="420" height="240" as="geometry" />
+        </mxCell>
+
+        <!-- AnimalInspector -->
+        <mxCell id="inspector" value="&lt;b&gt;AnimalInspector&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;+ inspectAnimal(animal) : Map&lt;String,Object&gt;&lt;br/&gt;+ invokeGetter(animal, name) : Object&lt;br/&gt;+ loadFactoryByName(name) : AnimalFactory&lt;br/&gt;+ discoverFactories() : List&lt;String&gt;&lt;br/&gt;+ compareAnimals(a1, a2) : Map&lt;String,String&gt;&lt;br/&gt;+ printInspectionReport(animal) : void" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#FFFFFF;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="640" width="380" height="220" as="geometry" />
         </mxCell>
 
         <!-- AnimalNotFoundException -->
-        <mxCell id="notfound" value="AnimalNotFoundException extends RuntimeException" style="rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="880" y="280" width="320" height="120" as="geometry" />
+        <mxCell id="anf" value="&lt;b&gt;AnimalNotFoundException&lt;/b&gt;&lt;br/&gt;&lt;i&gt;extends RuntimeException&lt;/i&gt;&lt;br/&gt;&lt;br/&gt;+ AnimalNotFoundException(id, repo)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#FFF0F0;fontSize=12;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="660" width="240" height="120" as="geometry" />
         </mxCell>
 
-        <!-- Inheritance / Implementation Edges -->
-        <mxCell id="impl-animalcomponent-animal" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=0;html=1;" edge="1" parent="1" source="animal" target="animalcomponent">
+        <!-- External: Position -->
+        <mxCell id="pos" value="Position (builder.MapBuilder)" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;strokeColor=#888888;fillColor=#FAFAFA;fontSize=11;align=center;verticalAlign=middle;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="40" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- External: MapBuilder -->
+        <mxCell id="mb" value="MapBuilder (builder.MapBuilder)" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;strokeColor=#888888;fillColor=#FAFAFA;fontSize=11;align=center;verticalAlign=middle;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="120" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- External: AnimalState -->
+        <mxCell id="astate" value="AnimalState (memento.GameSnapshot)" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;strokeColor=#888888;fillColor=#FAFAFA;fontSize=11;align=center;verticalAlign=middle;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="200" width="210" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- External: AnimalComponent note for repository map items -->
+        <mxCell id="acExt" value="AnimalComponent elements" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;strokeColor=#888888;fillColor=#FAFAFA;fontSize=11;align=center;verticalAlign=middle;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="960" y="840" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Inheritance / Implementation -->
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" source="animal" target="ac" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="impl-pack-animalcomponent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=0;html=1;" edge="1" parent="1" source="pack" target="animalcomponent">
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" source="carnivore" target="animal" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="carnivore-ext" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=0;html=1;" edge="1" parent="1" source="carnivore" target="animal">
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" source="herbivore" target="animal" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="herbivore-ext" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=0;html=1;" edge="1" parent="1" source="herbivore" target="animal">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="carnivorefactory-ext" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=0;html=1;" edge="1" parent="1" source="carnivorefactory" target="animalfactory">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="herbivorefactory-ext" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=0;html=1;" edge="1" parent="1" source="herbivorefactory" target="animalfactory">
+        <mxCell id="edge4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" source="pack" target="ac" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <!-- Associations -->
-        <mxCell id="factory-uses-repo" value="uses" style="endArrow=open;endFill=0;html=1;rounded=0;" edge="1" parent="1" source="animalfactory" target="repository">
+        <!-- Factory inheritance -->
+        <mxCell id="edge5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" source="carFactory" target="factory" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="factory-produces-animal" value="produces" style="endArrow=open;endFill=0;html=1;rounded=0;" edge="1" parent="1" source="animalfactory" target="animal">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="repo-contains" value="contains: AnimalComponent" style="endArrow=open;endFill=0;html=1;rounded=0;" edge="1" parent="1" source="repository" target="animalcomponent">
+        <mxCell id="edge6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" source="herFactory" target="factory" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <!-- Notes -->
-        <mxCell id="note" value="Factory Method pattern: `AnimalFactory` creates `Animal` subclasses. `AnimalRepository` stores `AnimalComponent` (Composite pattern via `AnimalPack`).`" style="shape=note;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;align=left;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="40" y="820" width="1160" height="120" as="geometry" />
+        <!-- Repository aggregation -->
+        <mxCell id="edge7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=diamond;endFill=0;" edge="1" source="repo" target="acExt" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Pack aggregation members -->
+        <mxCell id="edge8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=diamond;endFill=0;" edge="1" source="pack" target="ac" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Factory uses MapBuilder/Position/AnimalState -->
+        <mxCell id="edge9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=none;" edge="1" source="factory" target="mb" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=none;" edge="1" source="factory" target="pos" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=none;" edge="1" source="factory" target="astate" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Animal uses Position -->
+        <mxCell id="edge12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=none;" edge="1" source="animal" target="pos" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Inspector uses factories/animals -->
+        <mxCell id="edge13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=none;" edge="1" source="inspector" target="factory" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=none;" edge="1" source="inspector" target="ac" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- NotFoundException uses repository -->
+        <mxCell id="edge15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=none;" edge="1" source="anf" target="repo" parent="1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
       </root>
     </mxGraphModel>
   </diagram>
 </mxfile>
+
