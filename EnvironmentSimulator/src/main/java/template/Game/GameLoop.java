@@ -39,6 +39,12 @@ public class GameLoop {
         this.animalRepository = animalRepository;
         this.adminMode = adminMode;
         logger.debug("GameLoop initialized with adminMode={}", adminMode);
+
+        // Register a RecapObserver by default so that events are collected and
+        // printed in the tick recap even if no external observer was added.
+        RecapObserver defaultRecap = new RecapObserver();
+        addObserver(defaultRecap);
+        logger.debug("RecapObserver registered by default.");
     }
 
     public void addObserver(GameObserver observer) {
