@@ -1,3 +1,4 @@
+```markdown
 # Environment Simulator — Requirements Specification
 
 ## Project Overview
@@ -107,7 +108,6 @@ a command-driven interface with extensible handlers.
 - Game snapshots will be immutable to prevent state corruption.
 
 ---
-
 # Non‑Functional Requirements
 
 ## REQ‑NF‑001 — Performance
@@ -300,4 +300,4 @@ a command-driven interface with extensible handlers.
 - Network/multiplayer functionality
 - Database persistence
 - Plugin system for dynamic species loading
-
+```
