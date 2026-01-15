@@ -43,7 +43,7 @@ public class LoadCommandHandler extends CommandHandler {
 
             logger.debug("User selected file='{}', format='{}'", fileName, format);
 
-            if (this.askAreYouSure(scanner)) {
+            if (!this.askAreYouSure(scanner)) {
                 logger.warn("User cancelled the load operation.");
                 System.out.println("Load cancelled.");
                 return true;

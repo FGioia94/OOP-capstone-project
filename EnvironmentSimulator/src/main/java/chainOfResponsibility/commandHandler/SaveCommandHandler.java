@@ -43,7 +43,7 @@ public class SaveCommandHandler extends CommandHandler {
 
             logger.debug("User selected file='{}', format='{}'", fileName, format);
 
-            if (this.askAreYouSure(scanner)) {
+            if (!this.askAreYouSure(scanner)) {
                 logger.warn("User cancelled the Save operation.");
                 System.out.println("Save cancelled.");
                 return true;
