@@ -30,7 +30,7 @@ public class SaveGame {
         String projectRoot = System.getProperty("user.dir");
 
         // Full path to src/data/saved
-        Path saveDir = Paths.get(projectRoot, "src", "data", "saved");
+        Path saveDir = Paths.get(projectRoot, "EnvironmentSimulator", "src", "data", "saved");
 
         try {
             if (!Files.exists(saveDir)) {

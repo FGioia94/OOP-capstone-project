@@ -30,7 +30,7 @@ public class LoadGame {
         String projectRoot = System.getProperty("user.dir");
 
         // Full path to src/data/saved
-        Path saveDir = Paths.get(projectRoot, "src", "data", "saved");
+        Path saveDir = Paths.get(projectRoot, "EnvironmentSimulator", "src", "data", "saved");
 
         String extension;
         LoadStrategy strategy;
