@@ -3,6 +3,13 @@ package chainOfResponsibility.commandHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Command handler for continuing to the next game turn.
+ * <p>
+ * Handles the "continue" or "c" command, which marks the current turn as finished
+ * and allows the game loop to proceed to the next tick.
+ * </p>
+ */
 public class ContinueCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(ContinueCommandHandler.class);

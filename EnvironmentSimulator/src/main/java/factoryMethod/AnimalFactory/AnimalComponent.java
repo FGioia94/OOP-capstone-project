@@ -5,6 +5,14 @@ import builder.MapBuilder.Position;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Component interface for the Composite pattern.
+ * <p>
+ * Defines common operations for both individual animals and animal packs,
+ * allowing them to be treated uniformly. This is the base interface for
+ * all animal entities in the system.
+ * </p>
+ */
 public interface AnimalComponent extends Serializable {
 
 

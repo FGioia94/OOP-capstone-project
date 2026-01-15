@@ -6,6 +6,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
 
+/**
+ * Factory for creating herbivore animals.
+ * <p>
+ * Implements the Factory Method pattern to create herbivore instances
+ * with unique IDs and adds them to the animal repository.
+ * </p>
+ */
 public class HerbivoreFactory extends AnimalFactory {
 
     private static final Logger logger = LogManager.getLogger(HerbivoreFactory.class);

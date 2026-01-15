@@ -7,6 +7,14 @@ import org.apache.logging.log4j.core.config.Configurator;
 
 import java.util.*;
 
+/**
+ * Concrete game implementation for admin mode.
+ * <p>
+ * Extends the Game template to provide full debugging capabilities,
+ * verbose logging, and access to admin-only features like reflection-based
+ * animal inspection.
+ * </p>
+ */
 public class GameAdmin extends Game {
 
     @Override

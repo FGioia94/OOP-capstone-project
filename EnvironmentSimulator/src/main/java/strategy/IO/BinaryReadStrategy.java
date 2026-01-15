@@ -8,6 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Concrete strategy for reading binary data from files.
+ * <p>
+ * Reads binary content as byte arrays from disk, with exception shielding
+ * to convert low-level I/O exceptions.
+ * </p>
+ */
 public class BinaryReadStrategy implements ReadStrategy<byte[]> {
 
     private static final Logger logger = LogManager.getLogger(BinaryReadStrategy.class);

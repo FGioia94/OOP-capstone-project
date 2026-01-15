@@ -8,6 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Concrete strategy for reading JSON data from files.
+ * <p>
+ * Reads JSON content as strings from disk, with exception shielding
+ * to convert low-level I/O exceptions.
+ * </p>
+ */
 public class JsonReadStrategy implements ReadStrategy<String> {
 
     private static final Logger logger = LogManager.getLogger(JsonReadStrategy.class);

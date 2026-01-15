@@ -6,6 +6,12 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 
+/**
+ * Concrete strategy for persisting binary data to files.
+ * <p>
+ * Writes byte arrays directly to disk.
+ * </p>
+ */
 public class BinaryPersistenceStrategy extends PersistenceStrategy<byte[]> {
 
     private static final Logger logger = LogManager.getLogger(BinaryPersistenceStrategy.class);

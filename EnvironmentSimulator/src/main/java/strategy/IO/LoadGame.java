@@ -8,6 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Facade for loading game snapshots using different strategies.
+ * <p>
+ * Provides a simple interface for loading games from JSON or binary format,
+ * automatically selecting the appropriate strategy and handling file paths.
+ * </p>
+ */
 public class LoadGame {
 
     private static final Logger logger = LogManager.getLogger(LoadGame.class);

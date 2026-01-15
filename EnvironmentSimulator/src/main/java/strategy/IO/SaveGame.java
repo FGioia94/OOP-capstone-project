@@ -8,6 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Facade for saving game snapshots using different strategies.
+ * <p>
+ * Provides a simple interface for saving games in JSON or binary format,
+ * automatically selecting the appropriate strategy and handling file paths.
+ * </p>
+ */
 public class SaveGame {
 
     private static final Logger logger = LogManager.getLogger(SaveGame.class);

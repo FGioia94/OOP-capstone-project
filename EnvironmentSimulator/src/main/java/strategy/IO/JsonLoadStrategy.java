@@ -4,6 +4,13 @@ import memento.GameSnapshot.GameSnapshot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Concrete strategy for loading game snapshots from JSON files.
+ * <p>
+ * Combines JSON reading and deserialization to restore snapshots
+ * from human-readable JSON format.
+ * </p>
+ */
 public class JsonLoadStrategy implements LoadStrategy {
 
     private static final Logger logger = LogManager.getLogger(JsonLoadStrategy.class);

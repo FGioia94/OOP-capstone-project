@@ -4,6 +4,13 @@ import memento.GameSnapshot.GameSnapshot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Concrete strategy for saving game snapshots to binary files.
+ * <p>
+ * Combines binary serialization and persistence to save snapshots
+ * in compact binary format.
+ * </p>
+ */
 public class BinarySaveStrategy implements SaveStrategy {
 
     private static final Logger logger = LogManager.getLogger(BinarySaveStrategy.class);

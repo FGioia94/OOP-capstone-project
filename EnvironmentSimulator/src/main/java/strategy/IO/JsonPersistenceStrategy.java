@@ -7,6 +7,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+/**
+ * Concrete strategy for persisting JSON strings to files.
+ * <p>
+ * Writes JSON data to disk using UTF-8 encoding.
+ * </p>
+ */
 public class JsonPersistenceStrategy extends PersistenceStrategy<String> {
 
     private static final Logger logger = LogManager.getLogger(JsonPersistenceStrategy.class);

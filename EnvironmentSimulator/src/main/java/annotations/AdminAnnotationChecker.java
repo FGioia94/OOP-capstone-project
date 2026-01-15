@@ -20,7 +20,7 @@ public class AdminAnnotationChecker {
      */
     public static boolean requiresAdminMode(CommandHandler handler) {
         Class<?> handlerClass = handler.getClass();
-        boolean isAdminOnly = handlerClass.isAnnotationPresent(AdminOnly.class);
+        boolean isAdminOnly = handlerClass.isAnnotationPresent(AdminOnly.class); // checks if the handler is an admin-only handler
         
         if (isAdminOnly) {
             AdminOnly annotation = handlerClass.getAnnotation(AdminOnly.class);
@@ -37,6 +37,7 @@ public class AdminAnnotationChecker {
      * @param handlerClass The command handler class to check
      * @return true if the handler requires admin mode, false otherwise
      */
+    // Overloaded method to check using class type
     public static boolean requiresAdminMode(Class<? extends CommandHandler> handlerClass) {
         boolean isAdminOnly = handlerClass.isAnnotationPresent(AdminOnly.class);
         

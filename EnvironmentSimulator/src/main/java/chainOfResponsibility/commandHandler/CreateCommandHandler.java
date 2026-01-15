@@ -10,6 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Command handler for creating new animals in the game.
+ * <p>
+ * Handles the "create" command, which prompts the user for animal type and sex,
+ * then spawns a new animal at a random valid position on the map.
+ * </p>
+ */
 public class CreateCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(CreateCommandHandler.class);

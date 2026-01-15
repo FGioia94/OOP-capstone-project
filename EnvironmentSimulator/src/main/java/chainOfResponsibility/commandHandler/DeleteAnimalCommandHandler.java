@@ -4,6 +4,13 @@ import factoryMethod.AnimalFactory.AnimalNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Command handler for deleting a specific animal from the game.
+ * <p>
+ * Handles the "deleteAnimal" command, which prompts the user for an animal ID
+ * and removes that animal from the repository after confirmation.
+ * </p>
+ */
 public class DeleteAnimalCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(DeleteAnimalCommandHandler.class);

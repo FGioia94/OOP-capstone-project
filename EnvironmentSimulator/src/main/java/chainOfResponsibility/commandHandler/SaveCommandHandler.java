@@ -8,6 +8,13 @@ import template.Game.GameLoop;
 
 import java.util.Scanner;
 
+/**
+ * Command handler for saving the current game state.
+ * <p>
+ * Handles the "save" or "s" command, which prompts the user for a file name and format,
+ * then saves a snapshot of the current game state to disk.
+ * </p>
+ */
 public class SaveCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(SaveCommandHandler.class);

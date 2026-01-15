@@ -10,6 +10,14 @@ import org.apache.logging.log4j.Logger;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * Repository for managing all animals in the simulation.
+ * <p>
+ * Provides CRUD operations for animals and packs, with methods for
+ * filtering by type, location, and distance. Supports saving and
+ * restoring state through the Memento pattern.
+ * </p>
+ */
 public class AnimalRepository implements Serializable {
 
     private static final Logger logger = LogManager.getLogger(AnimalRepository.class);

@@ -9,6 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Command handler for listing all animal packs in the game.
+ * <p>
+ * Handles the "listPacks" command, which displays detailed information about
+ * each pack and its members currently in the repository.
+ * </p>
+ */
 public class ListPacksCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(ListPacksCommandHandler.class);

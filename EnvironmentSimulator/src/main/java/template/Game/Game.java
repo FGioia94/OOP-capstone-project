@@ -8,6 +8,14 @@ import org.apache.logging.log4j.Logger;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Abstract base class defining the Template Method pattern for game initialization.
+ * <p>
+ * Defines the skeleton of the game startup sequence, with hook methods for
+ * subclasses to customize specific steps. The {@link #start()} method orchestrates
+ * initialization, setup, and the main game loop.
+ * </p>
+ */
 public abstract class Game {
 
     protected final Logger logger = LogManager.getLogger(getClass());

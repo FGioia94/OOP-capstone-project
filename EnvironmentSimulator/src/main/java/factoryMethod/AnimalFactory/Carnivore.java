@@ -4,6 +4,13 @@ import builder.MapBuilder.Position;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Concrete implementation of a carnivore animal.
+ * <p>
+ * Carnivores have a detection range of 5 units and hunt other animals.
+ * Created by the CarnivoreFactory.
+ * </p>
+ */
 public class Carnivore extends Animal {
 
     private static final Logger logger = LogManager.getLogger(Carnivore.class);

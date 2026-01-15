@@ -3,6 +3,13 @@ package chainOfResponsibility.commandHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Command handler for clearing all animals from the game.
+ * <p>
+ * Handles the "clearAnimals" command, which removes all animals from the animal repository
+ * after user confirmation. This is a destructive operation that cannot be undone.
+ * </p>
+ */
 public class ClearAnimalsCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(ClearAnimalsCommandHandler.class);

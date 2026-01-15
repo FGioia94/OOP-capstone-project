@@ -6,6 +6,13 @@ import template.Game.GameLoop;
 
 import java.util.Scanner;
 
+/**
+ * Command handler for exiting the game.
+ * <p>
+ * Handles the "exit" command, which prompts the user for confirmation
+ * and then terminates the game loop if confirmed.
+ * </p>
+ */
 public class ExitCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(ExitCommandHandler.class);

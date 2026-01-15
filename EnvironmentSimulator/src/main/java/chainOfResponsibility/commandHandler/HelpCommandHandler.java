@@ -6,6 +6,13 @@ import template.Game.GameLoop;
 
 import java.util.Scanner;
 
+/**
+ * Command handler for displaying help information.
+ * <p>
+ * Handles the "help" or "h" command, which displays a list of all available
+ * commands and their descriptions to assist the user.
+ * </p>
+ */
 public class HelpCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(HelpCommandHandler.class);

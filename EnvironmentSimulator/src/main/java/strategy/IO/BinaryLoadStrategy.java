@@ -4,6 +4,13 @@ import memento.GameSnapshot.GameSnapshot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Concrete strategy for loading game snapshots from binary files.
+ * <p>
+ * Combines binary reading and deserialization to restore snapshots
+ * from compact binary format.
+ * </p>
+ */
 public class BinaryLoadStrategy implements LoadStrategy {
 
     private static final Logger logger = LogManager.getLogger(BinaryLoadStrategy.class);

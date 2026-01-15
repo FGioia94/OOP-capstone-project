@@ -11,6 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Command handler for spawning map resources and animals.
+ * <p>
+ * Handles the "spawn" command, which allows users to add water, grass, obstacles,
+ * or animals to the map by specifying type and quantity.
+ * </p>
+ */
 public class SpawnCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(SpawnCommandHandler.class);

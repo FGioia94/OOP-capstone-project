@@ -4,6 +4,13 @@ import memento.GameSnapshot.GameSnapshot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Concrete strategy for saving game snapshots to JSON files.
+ * <p>
+ * Combines JSON serialization and persistence to save snapshots
+ * in human-readable JSON format.
+ * </p>
+ */
 public class JsonSaveStrategy implements SaveStrategy {
 
     private static final Logger logger = LogManager.getLogger(JsonSaveStrategy.class);

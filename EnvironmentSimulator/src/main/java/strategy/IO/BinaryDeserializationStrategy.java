@@ -8,6 +8,13 @@ import org.apache.logging.log4j.Logger;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
+/**
+ * Concrete strategy for deserializing game snapshots from binary format.
+ * <p>
+ * Uses Java's ObjectInputStream to convert byte arrays back to GameSnapshot objects.
+ * Implements exception shielding to convert low-level exceptions.
+ * </p>
+ */
 public class BinaryDeserializationStrategy implements DeserializationStrategy<byte[]> {
 
     private static final Logger logger = LogManager.getLogger(BinaryDeserializationStrategy.class);

@@ -4,6 +4,13 @@ import builder.MapBuilder.Position;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Concrete implementation of a herbivore animal.
+ * <p>
+ * Herbivores have a detection range of 3 units and consume grass resources.
+ * Created by the HerbivoreFactory.
+ * </p>
+ */
 public class Herbivore extends Animal {
 
     private static final Logger logger = LogManager.getLogger(Herbivore.class);

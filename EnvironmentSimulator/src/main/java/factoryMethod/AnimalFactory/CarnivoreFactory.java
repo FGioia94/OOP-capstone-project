@@ -7,6 +7,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
 
+/**
+ * Factory for creating carnivore animals.
+ * <p>
+ * Implements the Factory Method pattern to create carnivore instances
+ * with unique IDs and adds them to the animal repository.
+ * </p>
+ */
 public class CarnivoreFactory extends AnimalFactory {
 
     private static final Logger logger = LogManager.getLogger(CarnivoreFactory.class);

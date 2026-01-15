@@ -6,6 +6,13 @@ import template.Game.GameLoop;
 
 import java.util.Scanner;
 
+/**
+ * Command handler for displaying map statistics.
+ * <p>
+ * Handles the "listMap" command, which shows the current counts of water, grass,
+ * obstacles, and animals on the game map.
+ * </p>
+ */
 public class ListMapCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(ListMapCommandHandler.class);

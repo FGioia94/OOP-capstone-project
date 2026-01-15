@@ -6,6 +6,13 @@ import factoryMethod.AnimalFactory.AnimalComponent;
 
 import java.io.Serializable;
 
+/**
+ * Memento representing the saved state of an individual animal.
+ * <p>
+ * Captures all essential properties of an animal at a point in time,
+ * allowing the animal to be restored later. Used for save/load functionality.
+ * </p>
+ */
 public record AnimalState(
         String id,
         int range,

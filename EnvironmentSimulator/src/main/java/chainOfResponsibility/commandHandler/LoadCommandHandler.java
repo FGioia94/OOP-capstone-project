@@ -8,6 +8,13 @@ import template.Game.GameLoop;
 
 import java.util.Scanner;
 
+/**
+ * Command handler for loading a saved game state.
+ * <p>
+ * Handles the "load" or "l" command, which prompts the user for a file name and format,
+ * then restores the game state from the saved snapshot.
+ * </p>
+ */
 public class LoadCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(LoadCommandHandler.class);

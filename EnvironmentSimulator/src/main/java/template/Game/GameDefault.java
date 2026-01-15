@@ -8,6 +8,13 @@ import org.apache.logging.log4j.core.config.Configurator;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Concrete game implementation for normal/default mode.
+ * <p>
+ * Extends the Game template to provide a standard game experience
+ * with logging disabled and simplified setup.
+ * </p>
+ */
 public class GameDefault extends Game {
 
     @Override

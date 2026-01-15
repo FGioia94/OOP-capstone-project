@@ -8,7 +8,7 @@ import java.lang.reflect.Parameter;
 
 /**
  * Utility class for validating positions annotated with @ValidPosition.
- * Uses reflection to read annotation metadata and perform validation.
+ * Uses reflection to read annotation and perform validation.
  */
 public class PositionValidator {
 
@@ -31,7 +31,7 @@ public class PositionValidator {
                 logger.error(message);
                 throw new IllegalArgumentException(message);
             }
-            return; // null is allowed
+            return;
         }
 
         // Validate X coordinate

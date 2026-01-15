@@ -11,6 +11,14 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * Main game loop managing turn-based simulation and command processing.
+ * <p>
+ * Coordinates animal behavior, resource management, user commands, and event notifications.
+ * Implements the Observer pattern to notify registered observers of game events.
+ * Supports both normal and admin modes with different command sets.
+ * </p>
+ */
 public class GameLoop {
 
     private static final Logger logger = LogManager.getLogger(GameLoop.class);

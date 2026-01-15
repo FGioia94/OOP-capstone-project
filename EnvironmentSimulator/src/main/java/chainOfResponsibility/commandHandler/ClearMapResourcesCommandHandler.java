@@ -3,6 +3,13 @@ package chainOfResponsibility.commandHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Command handler for clearing all map resources.
+ * <p>
+ * Handles the "clearResources" command, which removes all grass and water resources
+ * from the map after user confirmation. This is a destructive operation that cannot be undone.
+ * </p>
+ */
 public class ClearMapResourcesCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(ClearMapResourcesCommandHandler.class);

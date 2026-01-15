@@ -6,6 +6,13 @@ import template.Game.GameLoop;
 
 import java.util.Scanner;
 
+/**
+ * Command handler for listing all animals in the game.
+ * <p>
+ * Handles the "listAnimals" command, which displays detailed information about
+ * each animal currently in the repository, excluding pack entities.
+ * </p>
+ */
 public class ListAnimalsCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(ListAnimalsCommandHandler.class);

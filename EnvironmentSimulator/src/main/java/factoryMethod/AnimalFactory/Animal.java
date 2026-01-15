@@ -7,6 +7,14 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Abstract base class representing an individual animal in the simulation.
+ * <p>
+ * Implements the AnimalComponent interface and provides common functionality
+ * for all animal types, including position, health, experience, level, and
+ * reproduction behavior. Subclasses define specific animal types.
+ * </p>
+ */
 public abstract class Animal implements AnimalComponent {
 
     private static final Logger logger = LogManager.getLogger(Animal.class);

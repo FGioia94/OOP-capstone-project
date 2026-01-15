@@ -7,6 +7,14 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 
+/**
+ * Complete snapshot of the game state for save/load functionality.
+ * <p>
+ * Implements the Memento pattern by capturing both the animal repository
+ * state and map state, allowing the entire game to be saved and restored.
+ * Serializable for persistence to disk.
+ * </p>
+ */
 public class GameSnapshot implements Serializable {
 
     private static final Logger logger = LogManager.getLogger(GameSnapshot.class);

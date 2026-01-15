@@ -7,6 +7,13 @@ import org.apache.logging.log4j.Logger;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * Concrete strategy for serializing game snapshots to binary format.
+ * <p>
+ * Uses Java's ObjectOutputStream to convert GameSnapshot objects to byte arrays.
+ * More compact than JSON but not human-readable.
+ * </p>
+ */
 public class BinarySerializationStrategy implements SerializationStrategy<byte[]> {
 
     private static final Logger logger = LogManager.getLogger(BinarySerializationStrategy.class);

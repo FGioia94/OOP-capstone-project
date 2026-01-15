@@ -7,6 +7,14 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Composite implementation representing a group of animals.
+ * <p>
+ * Implements the Composite pattern by allowing multiple animals to be
+ * treated as a single unit. Pack attributes (position, HP, etc.) are
+ * computed as aggregates of member animals.
+ * </p>
+ */
 public class AnimalPack implements AnimalComponent {
 
     private static final Logger logger = LogManager.getLogger(AnimalPack.class);

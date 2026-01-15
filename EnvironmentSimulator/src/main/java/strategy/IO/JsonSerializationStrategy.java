@@ -6,6 +6,13 @@ import memento.GameSnapshot.GameSnapshot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Concrete strategy for serializing game snapshots to JSON format.
+ * <p>
+ * Uses Gson library to convert GameSnapshot objects to JSON strings.
+ * Implements exception shielding to convert low-level exceptions.
+ * </p>
+ */
 public class JsonSerializationStrategy implements SerializationStrategy<String> {
 
     private static final Logger logger = LogManager.getLogger(JsonSerializationStrategy.class);

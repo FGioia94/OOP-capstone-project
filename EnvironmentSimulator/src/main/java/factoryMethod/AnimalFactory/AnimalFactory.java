@@ -6,6 +6,14 @@ import memento.GameSnapshot.AnimalState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Abstract factory for creating animals using the Factory Method pattern.
+ * <p>
+ * Defines the factory method for creating different types of animals
+ * (carnivores and herbivores) with validation and initialization logic.
+ * Subclasses implement the specific animal creation logic.
+ * </p>
+ */
 public abstract class AnimalFactory {
 
     private static final Logger logger = LogManager.getLogger(AnimalFactory.class);

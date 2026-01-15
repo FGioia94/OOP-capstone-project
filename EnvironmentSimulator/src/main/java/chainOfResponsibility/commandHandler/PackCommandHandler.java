@@ -8,6 +8,13 @@ import template.Game.GameLoop;
 
 import java.util.*;
 
+/**
+ * Command handler for grouping animals into packs.
+ * <p>
+ * Handles the "pack" command, which prompts the user for animal IDs and creates
+ * a pack composite containing those animals. This demonstrates the Composite pattern.
+ * </p>
+ */
 public class PackCommandHandler extends CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(PackCommandHandler.class);
