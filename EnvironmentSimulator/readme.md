@@ -11,9 +11,14 @@ This repository contains an extensible Java SE ecosystem simulation demonstratin
 
 ## UML Diagrams
 
-- [Class diagram](docs/uml/EnvironmentSimulator-CLASS%20DIAGRAM.drawio.png)
-- [Use cases](docs/uml/EnvironmentSimulator-USE%20CASES.drawio.png)
-- [Overview / BP diagram](docs/uml/EnvironmentSimulator.drawio)
+### Class Diagram
+![Class Diagram](docs/uml/EnvironmentSimulator-CLASS%20DIAGRAM.png)
+
+### Use Cases
+![Use Cases](docs/uml/EnvironmentSimulator-USE%20CASES.png)
+
+### Overview / BP Diagram
+![Overview BP Diagram](docs/uml/EnvironmentSimulator-BP%20-%20001.png)
 
 ## How the game works (high-level)
 
